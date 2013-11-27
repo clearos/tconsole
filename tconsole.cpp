@@ -1172,8 +1172,6 @@ ccConsole::ccConsole()
 
     menu->InsertItem(new ccMenuItem(ccMENU_ID_CON_GUI,
         "Launch Graphics-mode Console", 0x10a, "F2"));
-    menu->InsertItem(new ccMenuItem(ccMENU_ID_CON_GUI_INSTALL,
-        "Install Graphics-mode Console"));
     menu->InsertItem(new ccMenuItem(ccMENU_ID_CON_GUI_REMOVE,
         "Remove Graphics-mode Console"));
     menu->InsertItem(new ccMenuSpacer());
@@ -1606,14 +1604,11 @@ void ccConsole::Resize(void)
 bool ccConsole::UpdateGraphicalConsoleItems(void)
 {
     menu->SetItemVisible(ccMENU_ID_CON_GUI, false);
-    menu->SetItemVisible(ccMENU_ID_CON_GUI_INSTALL, true);
     menu->SetItemVisible(ccMENU_ID_CON_GUI_REMOVE, false);
 
     struct stat gcon_stat;
     if (stat(PATH_GCONSOLE, &gcon_stat) == 0) {
         menu->SetItemVisible(ccMENU_ID_CON_GUI, true);
-        menu->SetItemVisible(ccMENU_ID_CON_GUI_INSTALL, false);
-        //menu->SetItemVisible(ccMENU_ID_CON_GUI_REMOVE, true);
         return true;
     }
 
@@ -1630,15 +1625,6 @@ void ccConsole::LaunchProcess(ccMenuId id)
     case ccMENU_ID_CON_GUI:
         path = PATH_XCONSOLE;
         signal_trap = false;
-        break;
-
-    case ccMENU_ID_CON_GUI_INSTALL:
-        progress = new ccDialogProgress(this, "Installing Packages");
-
-        path = PATH_SUDO " " PATH_TCONSOLE_YUM " install";
-        if (proc_pipe) delete proc_pipe;
-        proc_pipe = new ccProcessPipe(path, argv);
-        proc_pipe->Execute();
         break;
 
     case ccMENU_ID_CON_GUI_REMOVE:
