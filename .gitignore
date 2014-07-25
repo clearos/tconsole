@@ -17,3 +17,4 @@
 /tconsole
 /tconsole.spec
 /utils/Makefile
+/utils/Makefile.in
