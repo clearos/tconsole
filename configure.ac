@@ -3,7 +3,7 @@
 
 AC_PREREQ([2.63])
 AC_INIT([tconsole], [3.0], [http://www.clearfoundation.com/docs/developer/bug_tracker/])
-AM_INIT_AUTOMAKE([tconsole], [3.0])
+AM_INIT_AUTOMAKE
 AC_CONFIG_SRCDIR([tconsole.h])
 AC_CONFIG_HEADERS([config.h])
 
@@ -11,9 +11,9 @@ AC_CONFIG_HEADERS([config.h])
 AC_PROG_CXX
 
 # Checks for libraries.
-AC_CHECK_LIB([m], [ceil])
-AC_CHECK_LIB([ncursesw], [wprintw])
-AC_CHECK_LIB([pthread], [pthread_create])
+AC_CHECK_LIB([m], [ceil], [], [AC_MSG_ERROR([libm not found.])])
+AC_CHECK_LIB([ncursesw], [wprintw], [], [AC_MSG_ERROR([libncursesw not found.])])
+AC_CHECK_LIB([pthread], [pthread_create], [], [AC_MSG_ERROR([libpthread not found.])])
 
 # Checks for header files.
 AC_CHECK_HEADERS([fcntl.h stdint.h stdlib.h string.h sys/ioctl.h unistd.h])

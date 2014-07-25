@@ -10,6 +10,9 @@ Source: %{name}-%{version}.tar.gz
 BuildRoot: /var/tmp/%{name}-%{version}
 Requires: sudo
 Summary: Text-based console tool
+BuildRequires: autoconf >= 2.63
+BuildRequires: automake
+BuildRequires: libtool
 BuildRequires: ncurses-devel
 
 %description
