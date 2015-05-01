@@ -14,7 +14,7 @@
 #endif
 
 #ifndef PATH_XCONSOLE
-#define PATH_XCONSOLE			"/usr/bin/startx"
+#define PATH_XCONSOLE			"/usr/bin/start-gconsole"
 #endif
 
 #ifndef PATH_TCONSOLE
@@ -23,6 +23,10 @@
 
 #ifndef PATH_TCONSOLE_YUM
 #define PATH_TCONSOLE_YUM		"/usr/sbin/tc-yum"
+#endif
+
+#ifndef PATH_REGISTERED
+#define PATH_REGISTERED			"/var/clearos/registration/registered"
 #endif
 
 #ifndef PATH_RPM

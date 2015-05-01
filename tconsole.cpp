@@ -1607,7 +1607,8 @@ bool ccConsole::UpdateGraphicalConsoleItems(void)
     menu->SetItemVisible(ccMENU_ID_CON_GUI_REMOVE, false);
 
     struct stat gcon_stat;
-    if (stat(PATH_GCONSOLE, &gcon_stat) == 0) {
+    if (stat(PATH_GCONSOLE, &gcon_stat) == 0 &&
+		stat(PATH_REGISTERED, &gcon_stat) != 0) {
         menu->SetItemVisible(ccMENU_ID_CON_GUI, true);
         return true;
     }
