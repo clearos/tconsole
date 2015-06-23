@@ -15,6 +15,5 @@
 /*.o
 /stamp-h1
 /tconsole
-/tconsole.spec
 /utils/Makefile
 /utils/Makefile.in
