@@ -17,3 +17,6 @@
 /tconsole
 /utils/Makefile
 /utils/Makefile.in
+/Makefile
+*.src.rpm
+*.tar.gz
