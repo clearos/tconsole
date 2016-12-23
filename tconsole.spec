@@ -1,13 +1,14 @@
 # Text console RPM spec
 Name: tconsole
-Version: 3.1
-Release: 2%{dist}
+Version: 3.2
+Release: 1%{dist}
 Vendor: ClearFoundation
 License: GPL
 Group: System Environment/Daemons
 Packager: ClearFoundation
 Source: %{name}-%{version}.tar.gz
 BuildRoot: /var/tmp/%{name}-%{version}
+Requires: app-network-core
 Requires: sudo
 Summary: Text-based console tool
 BuildRequires: autoconf >= 2.63

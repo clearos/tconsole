@@ -6,64 +6,123 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
+
+#include <string>
+#include <sstream>
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
+using namespace std;
+
 #include "util.h"
 #include "exceptions.h"
 
 ccRegEx::ccRegEx(const char *expr, int nmatch, int flags)
-	: match(NULL), nmatch(nmatch), matches(NULL)
+    : match(NULL), nmatch(nmatch), matches(NULL)
 {
-	if (!nmatch) flags |= REG_NOSUB;
-	if (regcomp(&regex, expr, flags) != 0)
-		throw ccException("Regular expression compilation error");
-	if (nmatch) {
-		match = new regmatch_t[nmatch];
-		matches = new char *[nmatch];
-		for (int i = 0; i < nmatch; i++) matches[i] = NULL;
-	}
+    int rc;
+
+    if (!nmatch) flags |= REG_NOSUB;
+    if ((rc = regcomp(&regex, expr, flags)) != 0) {
+        ostringstream os;
+        os << "Regular expression compilation error:";
+        Error(rc, os);
+        throw ccException(os.str().c_str());
+    }
+    if (nmatch) {
+        match = new regmatch_t[nmatch];
+        matches = new char *[nmatch];
+        for (int i = 0; i < nmatch; i++) matches[i] = NULL;
+    }
 }
 
 ccRegEx::~ccRegEx()
 {
-	regfree(&regex);
-	if (nmatch && match) delete [] match;
-	for (int i = 0; i < nmatch; i++) {
-		if (matches[i]) delete [] matches[i];
-	}
-	if (matches) delete [] matches;
+    regfree(&regex);
+    if (nmatch && match) delete [] match;
+    for (int i = 0; i < nmatch; i++)
+        if (matches[i]) delete [] matches[i];
+    if (matches) delete [] matches;
 }
 
 int ccRegEx::Execute(const char *subject)
 {
-	if (!subject)
-		throw ccException("Invalid regular expression subject");
-	int rc = regexec(&regex, subject, nmatch, match, 0);
-	for (int i = 0; i < nmatch; i++) {
-		if (matches[i]) delete [] matches[i];
-		matches[i] = NULL;
-	}
-	if (rc == 0) {
-		for (int i = 0; i < nmatch; i++) {
-			int len = match[i].rm_eo - match[i].rm_so;
-			char *buffer = new char[len + 1];
-			memset(buffer, 0, len + 1);
-			memcpy(buffer, subject + match[i].rm_so, len);
-			matches[i] = buffer;
-		}
-	}
-	return rc;
+    if (!subject)
+        throw ccException("Invalid regular expression subject");
+    int rc = regexec(&regex, subject, nmatch, match, 0);
+    for (int i = 0; i < nmatch; i++) {
+        if (matches[i]) delete [] matches[i];
+        matches[i] = NULL;
+    }
+    if (rc == 0) {
+        for (int i = 0; i < nmatch; i++) {
+            int len = match[i].rm_eo - match[i].rm_so;
+            char *buffer = new char[len + 1];
+            memset(buffer, 0, len + 1);
+            memcpy(buffer, subject + match[i].rm_so, len);
+            matches[i] = buffer;
+        }
+    }
+    return rc;
 }
 
 const char *ccRegEx::GetMatch(int match)
 {
-	if (match < 0 || match >= nmatch)
-		throw ccException("Invalid regular expression match offset");
-	if (this->match[match].rm_so == -1) return NULL;
-	return matches[match];
+    if (match < 0 || match >= nmatch)
+        throw ccException("Invalid regular expression match offset");
+    if (this->match[match].rm_so == -1) return NULL;
+    return matches[match];
+}
+
+void ccRegEx::Error(int rc, ostringstream &os)
+{
+        switch (rc) {
+        case REG_BADBR:
+            os << "Invalid use of back reference operator.";
+            break;
+        case REG_BADPAT:
+            os << "Invalid use of pattern operators such as group or list.";
+            break;
+        case REG_BADRPT:
+            os << "Invalid use of repetition operators such as using '*' as the first character.";
+            break;
+        case REG_EBRACE:
+            os << "Un-matched brace interval operators.";
+            break;
+        case REG_EBRACK:
+            os << "Un-matched bracket list operators.";
+            break;
+        case REG_ECOLLATE:
+            os << "Invalid collating element.";
+            break;
+        case REG_ECTYPE:
+            os << "Unknown character class name.";
+            break;
+        case REG_EEND:
+            os << "Nonspecific error.  This is not defined by POSIX.2.";
+            break;
+        case REG_EESCAPE:
+            os << "Trailing backslash.";
+            break;
+        case REG_EPAREN:
+            os << "Un-matched parenthesis group operators.";
+            break;
+        case REG_ERANGE:
+            os << "Invalid use of the range operator, e.g., the ending point of the range occurs prior to the starting point.";
+            break;
+        case REG_ESIZE:
+            os << "Compiled regular expression requires a pattern buffer larger than 64Kb.  This is not defined by POSIX.2.";
+            break;
+        case REG_ESPACE:
+            os << "The regex routines ran out of memory.";
+            break;
+        case REG_ESUBREG:
+            os << "Invalid back reference to a subexpression.";
+            break;
+        }
 }
 
 ccFile::ccFile()
@@ -145,6 +204,22 @@ const char *ccFile::Read(const char *filename)
     file_stat.st_size = -1;
     this->filename = filename;
     return (const char *)buffer;
+}
+
+void ccGetLanIp(const char *command, string &ip)
+{
+    ccRegEx rx("^([0-9a-F:\\.]*)", 2);
+    FILE *ph = popen(command, "r");
+
+    ip = "127.0.0.1";
+    if (ph) {
+        char buffer[48];
+        memset(buffer, 0, sizeof(buffer));
+        if (fgets(buffer, sizeof(buffer) - 1, ph) &&
+            rx.Execute(buffer) == 0)
+            ip = rx.GetMatch(1);
+        pclose(ph);
+    }
 }
 
 // vi: ts=4

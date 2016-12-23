@@ -13,101 +13,101 @@ using namespace std;
 class ccException : public exception
 {
 public:
-	ccException(const string &reason) : reason(reason) { }
-	ccException(const ostringstream &reason) : reason(reason.str()) { }
-	virtual ~ccException(void) throw() { }
+    ccException(const string &reason) : reason(reason) { }
+    ccException(const ostringstream &reason) : reason(reason.str()) { }
+    virtual ~ccException(void) throw() { }
 
-	virtual const char *what() const throw() { return reason.c_str(); }
-	virtual const string& std_what() const throw() { return reason; }
+    virtual const char *what() const throw() { return reason.c_str(); }
+    virtual const string& std_what() const throw() { return reason; }
 
 private:
-	string reason;
+    string reason;
 };
 
 class ccLocaleException : public ccException
 {
 public:
-	ccLocaleException(const string &tag)
-		: ccException("Locale tag not found"), tag(tag) { }
-	~ccLocaleException() throw() { }
+    ccLocaleException(const string &tag)
+        : ccException("Locale tag not found"), tag(tag) { }
+    ~ccLocaleException() throw() { }
 
-	string GetTag(void) { return tag; }
+    string GetTag(void) { return tag; }
 
 private:
-	string tag;
+    string tag;
 };
 
 class ccThreadException : public ccException
 {
 public:
-	ccThreadException(long thread_id, const string &reason, int error)
-		: ccException(reason), id(id), reason(reason), error(error) { }
-	~ccThreadException() throw() { }
+    ccThreadException(long thread_id, const string &reason, int error)
+        : ccException(reason), id(id), reason(reason), error(error) { }
+    ~ccThreadException() throw() { }
 
-	long GetId(void) { return id; }
-	int GetError(void) { return error; }
-	string GetReason(void) { return reason; }
+    long GetId(void) { return id; }
+    int GetError(void) { return error; }
+    string GetReason(void) { return reason; }
 
 private:
-	long id;
-	string reason;
-	int error;
+    long id;
+    string reason;
+    int error;
 };
 
 class ccMutexException : public ccException
 {
 public:
-	ccMutexException(const string &reason, int error)
-		: ccException(reason), reason(reason), error(error) { }
-	~ccMutexException() throw() { }
+    ccMutexException(const string &reason, int error)
+        : ccException(reason), reason(reason), error(error) { }
+    ~ccMutexException() throw() { }
 
-	int GetError(void) { return error; }
-	string GetReason(void) { return reason; }
+    int GetError(void) { return error; }
+    string GetReason(void) { return reason; }
 
 private:
-	string reason;
-	int error;
+    string reason;
+    int error;
 };
 
 class ccConditionException : public ccException
 {
 public:
-	ccConditionException(const string &reason, int error)
-		: ccException(reason), reason(reason), error(error) { }
-	~ccConditionException() throw() { }
+    ccConditionException(const string &reason, int error)
+        : ccException(reason), reason(reason), error(error) { }
+    ~ccConditionException() throw() { }
 
-	int GetError(void) { return error; }
-	string GetReason(void) { return reason; }
+    int GetError(void) { return error; }
+    string GetReason(void) { return reason; }
 
 private:
-	string reason;
-	int error;
+    string reason;
+    int error;
 };
 
 class ccSemaphoreException : public ccException
 {
 public:
-	ccSemaphoreException(const string &reason)
-		: ccException(reason), reason(reason) { }
-	~ccSemaphoreException() throw() { }
+    ccSemaphoreException(const string &reason)
+        : ccException(reason), reason(reason) { }
+    ~ccSemaphoreException() throw() { }
 
-	string GetReason(void) { return reason; }
+    string GetReason(void) { return reason; }
 
 private:
-	string reason;
+    string reason;
 };
 
 class ccSingleInstanceException : public ccException
 {
 public:
-	ccSingleInstanceException(const string &classname)
-		: ccException(classname), classname(classname) { }
-	~ccSingleInstanceException() throw() { }
+    ccSingleInstanceException(const string &classname)
+        : ccException(classname), classname(classname) { }
+    ~ccSingleInstanceException() throw() { }
 
-	string GetClassName(void) { return classname; }
+    string GetClassName(void) { return classname; }
 
 private:
-	string classname;
+    string classname;
 };
 
 #endif

@@ -11,17 +11,19 @@ using namespace std;
 class ccRegEx
 {
 public:
-	ccRegEx(const char *expr, int nmatch = 0, int flags = REG_EXTENDED);
-	~ccRegEx();
+    ccRegEx(const char *expr, int nmatch = 0, int flags = REG_EXTENDED);
+    ~ccRegEx();
 
-	int Execute(const char *subject);
-	const char *GetMatch(int match);
+    int Execute(const char *subject);
+    const char *GetMatch(int match);
+
+    void Error(int rc, ostringstream &os);
 
 protected:
-	regex_t regex;
-	size_t nmatch;
-	regmatch_t *match;
-	char **matches;
+    regex_t regex;
+    size_t nmatch;
+    regmatch_t *match;
+    char **matches;
 };
 
 class ccFile
@@ -43,6 +45,8 @@ protected:
     char *buffer;
     struct stat file_stat;
 };
+
+void ccGetLanIp(const char *command, string &ip);
 
 #endif // _UTIL_H
 // vi: ts=4

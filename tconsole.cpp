@@ -6,6 +6,7 @@
 #include <iostream>
 #include <string>
 #include <iomanip>
+#include <sstream>
 
 #include <sys/ioctl.h>
 #include <sys/types.h>
@@ -1188,10 +1189,10 @@ ccConsole::ccConsole()
 
     if (UpdateGraphicalConsoleItems()) {
         struct stat gcon_stat;
-		if (stat(PATH_REGISTERED, &gcon_stat) != 0) {
-			menu->SelectItem(ccMENU_ID_CON_GUI);
-			LaunchProcess(menu->GetSelected());
-		}
+        if (stat(PATH_REGISTERED, &gcon_stat) != 0) {
+            menu->SelectItem(ccMENU_ID_CON_GUI);
+            LaunchProcess(menu->GetSelected());
+        }
     }
     else {
         menu->SelectFirst();
@@ -1225,7 +1226,7 @@ ccConsole::~ccConsole()
         if (proc_pipe) delete proc_pipe;
 
         instance = NULL;
-        endwin();
+        if (!isendwin()) endwin();
     }
 }
 
@@ -1569,6 +1570,15 @@ void ccConsole::Draw(void)
         wprintw(window, "Idle: %s%%", idle.c_str());
     }
 
+    string lan_ip;
+    ccGetLanIp(PATH_NETWORK, lan_ip);
+
+    ostringstream url;
+    url << "Configuration URL: https://";
+    url << lan_ip << ":81/";
+    wmove(window, size.GetHeight() - 5, (size.GetWidth() - url.str().size()) / 2);
+    wprintw(window, url.str().c_str());
+
     string keys("Press Alt-F2 to Alt-F6 for additional shell terminals.");
     wmove(window, size.GetHeight() - 4, (size.GetWidth() - keys.size()) / 2);
     wprintw(window, keys.c_str());
@@ -1834,7 +1844,13 @@ void *ccThreadEvent::Entry(void)
 {
     while (!TestDestroy())
     {
-        server->DispatchEvents();
+        try {
+            server->DispatchEvents();
+        } catch (ccException &e) {
+            endwin();
+            cerr << "ccException: " << e.what() << endl;
+            throw;
+        }
         usleep(SLEEP_DELAY);
     }
 

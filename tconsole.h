@@ -14,39 +14,39 @@
 #endif
 
 #ifndef PATH_XCONSOLE
-#define PATH_XCONSOLE			"/usr/bin/start-gconsole"
+#define PATH_XCONSOLE           "/usr/bin/start-gconsole"
 #endif
 
 #ifndef PATH_TCONSOLE
-#define PATH_TCONSOLE			"/usr/sbin/console_start"
+#define PATH_TCONSOLE           "/usr/sbin/console_start"
 #endif
 
 #ifndef PATH_TCONSOLE_YUM
-#define PATH_TCONSOLE_YUM		"/usr/sbin/tc-yum"
+#define PATH_TCONSOLE_YUM       "/usr/sbin/tc-yum"
 #endif
 
 #ifndef PATH_REGISTERED
-#define PATH_REGISTERED			"/var/clearos/registration/registered"
+#define PATH_REGISTERED         "/var/clearos/registration/registered"
 #endif
 
 #ifndef PATH_RPM
-#define PATH_RPM				"/bin/rpm"
+#define PATH_RPM                "/bin/rpm"
 #endif
 
 #ifndef PATH_IPTRAF
-#define PATH_IPTRAF				"/usr/bin/iptraf"
+#define PATH_IPTRAF             "/usr/bin/iptraf"
 #endif
 
 #ifndef PATH_REBOOT
-#define PATH_REBOOT				"/sbin/reboot"
+#define PATH_REBOOT             "/sbin/reboot"
 #endif
 
 #ifndef PATH_HALT
-#define PATH_HALT				"/sbin/halt"
+#define PATH_HALT               "/sbin/halt"
 #endif
 
 #ifndef PATH_SUDO
-#define PATH_SUDO				"/usr/bin/sudo"
+#define PATH_SUDO               "/usr/bin/sudo"
 #endif
 
 #ifndef PATH_APP_PASSWD
@@ -73,6 +73,10 @@
 #define PATH_LOADAVG             "/proc/loadavg"
 #endif
 
+#ifndef PATH_NETWORK
+#define PATH_NETWORK             "/usr/sbin/network --get-lan-ips"
+#endif
+
 #include <exception>
 #include <vector>
 #include <sstream>
@@ -83,15 +87,15 @@ using namespace std;
 
 enum ccEventType
 {
-	ccEVT_KEY_PRESS,
-	ccEVT_SIGNAL,
-	ccEVT_SYSINFO,
-	ccEVT_OUTPUT,
-	ccEVT_FAULT,
-	ccEVT_PROCESS,
-	ccEVT_DIALOG,
-	ccEVT_PAINT,
-	ccEVT_TIMER
+    ccEVT_KEY_PRESS,
+    ccEVT_SIGNAL,
+    ccEVT_SYSINFO,
+    ccEVT_OUTPUT,
+    ccEVT_FAULT,
+    ccEVT_PROCESS,
+    ccEVT_DIALOG,
+    ccEVT_PAINT,
+    ccEVT_TIMER
 };
 
 class ccEventClient;
@@ -99,110 +103,110 @@ class ccEventClient;
 class ccEvent
 {
 public:
-	ccEvent(ccEventType type, ccEventClient *src, ccEventClient *dst);
-	virtual ~ccEvent() { };
+    ccEvent(ccEventType type, ccEventClient *src, ccEventClient *dst);
+    virtual ~ccEvent() { };
 
-	ccEventType GetType(void) { return type; };
-	ccEventClient *GetSource(void) { return src; };
-	ccEventClient *GetDestination(void) { return dst; };
+    ccEventType GetType(void) { return type; };
+    ccEventClient *GetSource(void) { return src; };
+    ccEventClient *GetDestination(void) { return dst; };
 
-	virtual const string ToString(void)
-	{
-		ostringstream os;
-		os << "ccEvent 0x" << hex << type << ", src: " << src << ", dst: " << dst;
-		return os.str();
-	};
+    virtual const string ToString(void)
+    {
+        ostringstream os;
+        os << "ccEvent 0x" << hex << type << ", src: " << src << ", dst: " << dst;
+        return os.str();
+    };
 
-	ccEvent& operator=(const ccEvent &e);
+    ccEvent& operator=(const ccEvent &e);
 
 protected:
-	ccEventType type;
-	ccEventClient *src;
-	ccEventClient *dst;
+    ccEventType type;
+    ccEventClient *src;
+    ccEventClient *dst;
 };
 
 class ccEventKeyPress : public ccEvent
 {
 public:
-	ccEventKeyPress(int key, ccEventClient *src = NULL);
+    ccEventKeyPress(int key, ccEventClient *src = NULL);
 
-	int GetKey(void) { return key; };
+    int GetKey(void) { return key; };
 
 protected:
-	int key;
+    int key;
 };
 
 class ccEventSignal : public ccEvent
 {
 public:
-	ccEventSignal(int sig);
+    ccEventSignal(int sig);
 
-	int GetSignal(void) { return sig; };
+    int GetSignal(void) { return sig; };
 
-	virtual const string ToString(void)
-	{
-		ostringstream os;
-		os << ccEvent::ToString() << ", sig: " << sig;
-		return os.str();
-	};
+    virtual const string ToString(void)
+    {
+        ostringstream os;
+        os << ccEvent::ToString() << ", sig: " << sig;
+        return os.str();
+    };
 
 protected:
-	int sig;
+    int sig;
 };
 
 class ccEventOutput : public ccEvent
 {
 public:
-	ccEventOutput(const string &text, ccEventClient *src = NULL);
-	ccEventOutput(ostringstream &stream, ccEventClient *src = NULL);
+    ccEventOutput(const string &text, ccEventClient *src = NULL);
+    ccEventOutput(ostringstream &stream, ccEventClient *src = NULL);
 
-	string GetText(void) { return text; };
+    string GetText(void) { return text; };
 
 protected:
-	string text;
+    string text;
 };
 
 class ccEventFault : public ccEvent
 {
 public:
-	ccEventFault(const string &reason);
+    ccEventFault(const string &reason);
 
-	string GetReason(void) { return reason; };
+    string GetReason(void) { return reason; };
 
 protected:
-	string reason;
+    string reason;
 };
 
 class ccEventSysInfo : public ccEvent
 {
 public:
-	ccEventSysInfo(ccEventClient *src = NULL)
-		: ccEvent(ccEVT_SYSINFO, src, NULL), sys_loadavg_color(1) { };
+    ccEventSysInfo(ccEventClient *src = NULL)
+        : ccEvent(ccEVT_SYSINFO, src, NULL), sys_loadavg_color(1) { };
 
-	void SetHostname(const string &hostname) { this->hostname = hostname; };
-	void SetRelease(const string &release) { this->release = release; };
-	void SetTime(ostringstream &stream) { sys_time = stream.str(); };
-	void SetUptime(ostringstream &stream) { sys_uptime = stream.str(); };
-	void SetLoadAverage(ostringstream &stream) { sys_loadavg = stream.str(); };
-	void SetLoadAverageColor(int color) { sys_loadavg_color = color; };
-	void SetIdle(ostringstream &stream) { sys_idle = stream.str(); };
+    void SetHostname(const string &hostname) { this->hostname = hostname; };
+    void SetRelease(const string &release) { this->release = release; };
+    void SetTime(ostringstream &stream) { sys_time = stream.str(); };
+    void SetUptime(ostringstream &stream) { sys_uptime = stream.str(); };
+    void SetLoadAverage(ostringstream &stream) { sys_loadavg = stream.str(); };
+    void SetLoadAverageColor(int color) { sys_loadavg_color = color; };
+    void SetIdle(ostringstream &stream) { sys_idle = stream.str(); };
 
-	const string GetHostname(void) { return hostname; };
-	const string GetRelease(void) { return release; };
-	const string GetTime(void) { return sys_time; };
-	const string GetUptime(void) { return sys_uptime; };
-	const string GetLoadAverage(void) { return sys_loadavg; };
-	int GetLoadAverageColor(void) { return sys_loadavg_color; };
-	const string GetIdle(void) { return sys_idle; };
+    const string GetHostname(void) { return hostname; };
+    const string GetRelease(void) { return release; };
+    const string GetTime(void) { return sys_time; };
+    const string GetUptime(void) { return sys_uptime; };
+    const string GetLoadAverage(void) { return sys_loadavg; };
+    int GetLoadAverageColor(void) { return sys_loadavg_color; };
+    const string GetIdle(void) { return sys_idle; };
 
 protected:
-	string hostname;
-	string release;
-	string sys_time;
-	string sys_uptime;
-	string sys_loadavg;
-	int sys_loadavg_color;
-	string sys_idle;
+    string hostname;
+    string release;
+    string sys_time;
+    string sys_uptime;
+    string sys_loadavg;
+    int sys_loadavg_color;
+    string sys_idle;
 };
 
 class ccProcessBase;
@@ -210,216 +214,216 @@ class ccProcessBase;
 class ccEventProcess : public ccEvent
 {
 public:
-	ccEventProcess(ccEventClient *dst, ccProcessBase *process)
-		: ccEvent(ccEVT_PROCESS, NULL, dst), process(process) { };
+    ccEventProcess(ccEventClient *dst, ccProcessBase *process)
+        : ccEvent(ccEVT_PROCESS, NULL, dst), process(process) { };
 
-	const string GetText(void) { return text; };
-	const string GetError(void) { return error; };
-	ccProcessBase *GetProcess(void) { return process; };
+    const string GetText(void) { return text; };
+    const string GetError(void) { return error; };
+    ccProcessBase *GetProcess(void) { return process; };
 
-	void SetText(const string &text) { this->text = text; };
-	void SetError(const string &error) { this->error = error; };
+    void SetText(const string &text) { this->text = text; };
+    void SetError(const string &error) { this->error = error; };
 
 protected:
-	string text;
-	string error;
-	ccProcessBase *process;
+    string text;
+    string error;
+    ccProcessBase *process;
 };
 
 enum ccButtonId
 {
-	ccBUTTON_ID_NONE = 0,
-	ccBUTTON_ID_OK,
-	ccBUTTON_ID_CANCEL,
-	ccBUTTON_ID_YES,
-	ccBUTTON_ID_NO,
-	ccBUTTON_ID_LOGIN
+    ccBUTTON_ID_NONE = 0,
+    ccBUTTON_ID_OK,
+    ccBUTTON_ID_CANCEL,
+    ccBUTTON_ID_YES,
+    ccBUTTON_ID_NO,
+    ccBUTTON_ID_LOGIN
 };
 
 class ccEventDialog : public ccEvent
 {
 public:
-	ccEventDialog(ccEventClient *src, ccEventClient *dst, ccButtonId id)
-		: ccEvent(ccEVT_DIALOG, src, dst), id(id) { };
+    ccEventDialog(ccEventClient *src, ccEventClient *dst, ccButtonId id)
+        : ccEvent(ccEVT_DIALOG, src, dst), id(id) { };
 
-	ccButtonId GetId(void) { return id; };
+    ccButtonId GetId(void) { return id; };
 
 protected:
-	ccButtonId id;
+    ccButtonId id;
 };
 
 class ccEventPaint : public ccEvent
 {
 public:
-	ccEventPaint(ccEventClient *src = NULL)
-		: ccEvent(ccEVT_PAINT, src, NULL) { };
+    ccEventPaint(ccEventClient *src = NULL)
+        : ccEvent(ccEVT_PAINT, src, NULL) { };
 };
 
 class ccTimer;
 class ccEventTimer : public ccEvent
 {
 public:
-	ccEventTimer(ccEventClient *dst)
-		: ccEvent(ccEVT_TIMER, NULL, dst) { };
-	ccTimer *GetTimer(void) { return timer; };
+    ccEventTimer(ccEventClient *dst)
+        : ccEvent(ccEVT_TIMER, NULL, dst) { };
+    ccTimer *GetTimer(void) { return timer; };
 
 protected:
-	ccTimer *timer;
+    ccTimer *timer;
 };
 
 class ccEventClient
 {
 public:
-	ccEventClient(void);
-	virtual ~ccEventClient();
+    ccEventClient(void);
+    virtual ~ccEventClient();
 
-	virtual bool HandleEvent(ccEvent *event);
+    virtual bool HandleEvent(ccEvent *event);
 };
 
 class ccEventServer
 {
 public:
-	ccEventServer(void);
-	~ccEventServer();
+    ccEventServer(void);
+    ~ccEventServer();
 
-	void PostEvent(ccEvent *event);
-	static ccEventServer *Instance(void);
-	void RegisterEvent(ccEventClient *client, ccEventType type);
-	void UnregisterClient(ccEventClient *client);
+    void PostEvent(ccEvent *event);
+    static ccEventServer *Instance(void);
+    void RegisterEvent(ccEventClient *client, ccEventType type);
+    void UnregisterClient(ccEventClient *client);
 
 protected:
-	friend class ccThreadEvent;
+    friend class ccThreadEvent;
 
-	void DispatchEvents(void);
+    void DispatchEvents(void);
 
-	static ccEventServer *instance;
+    static ccEventServer *instance;
 
-	ccMutex queue_lock;
-	vector<ccEvent *> queue;
-	typedef pair<ccEventClient *, ccEventType> client_pair;
-	vector<client_pair> client;
+    ccMutex queue_lock;
+    vector<ccEvent *> queue;
+    typedef pair<ccEventClient *, ccEventType> client_pair;
+    vector<client_pair> client;
 };
 
 class ccSize;
 class ccPoint
 {
 public:
-	ccPoint(void) : x(0), y(0) { };
-	ccPoint(int x, int y) : x(x), y(y) { };
+    ccPoint(void) : x(0), y(0) { };
+    ccPoint(int x, int y) : x(x), y(y) { };
 
-	int GetX(void) { return x; };
-	int GetY(void) { return y; };
+    int GetX(void) { return x; };
+    int GetY(void) { return y; };
 
-	void SetX(int x) { this->x = x; };
-	void SetY(int y) { this->y = y; };
+    void SetX(int x) { this->x = x; };
+    void SetY(int y) { this->y = y; };
 
-	ccPoint& operator=(const ccPoint &p)
-	{
-		this->x = p.x;
-		this->y = p.y;
-		return *this;
-	};
+    ccPoint& operator=(const ccPoint &p)
+    {
+        this->x = p.x;
+        this->y = p.y;
+        return *this;
+    };
 
-	virtual const string ToString(void)
-	{
-		ostringstream os;
-		os << "ccPoint x: " << setw(3) << x << ", y: " << setw(3) << y;
-		return os.str();
-	};
+    virtual const string ToString(void)
+    {
+        ostringstream os;
+        os << "ccPoint x: " << setw(3) << x << ", y: " << setw(3) << y;
+        return os.str();
+    };
 
 protected:
-	friend class ccSize;
+    friend class ccSize;
 
-	int x;
-	int y;
+    int x;
+    int y;
 };
 
 class ccSize : public ccPoint
 {
 public:
-	ccSize(void) : ccPoint(x, y), w(0), h(0) { };
-	ccSize(int x, int y, int w, int h) : ccPoint(x, y), w(w), h(h) { };
+    ccSize(void) : ccPoint(x, y), w(0), h(0) { };
+    ccSize(int x, int y, int w, int h) : ccPoint(x, y), w(w), h(h) { };
 
-	int GetWidth(void) { return w; };
-	int GetHeight(void) { return h; };
+    int GetWidth(void) { return w; };
+    int GetHeight(void) { return h; };
 
-	void SetWidth(int w) { this->w = w; };
-	void SetHeight(int h) { this->h = h; };
+    void SetWidth(int w) { this->w = w; };
+    void SetHeight(int h) { this->h = h; };
 
-	ccSize& operator=(const ccPoint &p)
-	{
-		this->x = p.x;
-		this->y = p.y;
-		return *this;
-	};
+    ccSize& operator=(const ccPoint &p)
+    {
+        this->x = p.x;
+        this->y = p.y;
+        return *this;
+    };
 
-	ccSize& operator=(const ccSize &s)
-	{
-		this->x = s.x;
-		this->y = s.y;
-		this->w = s.w;
-		this->h = s.h;
-		return *this;
-	};
+    ccSize& operator=(const ccSize &s)
+    {
+        this->x = s.x;
+        this->y = s.y;
+        this->w = s.w;
+        this->h = s.h;
+        return *this;
+    };
 
-	virtual const string ToString(void)
-	{
-		ostringstream os;
-		os << "ccSize x: " << setw(3) << x << ", y: " << setw(3) << y;
-		os << ", w: " << setw(3) << w << ", h: " << setw(3) << h;
-		return os.str();
-	};
+    virtual const string ToString(void)
+    {
+        ostringstream os;
+        os << "ccSize x: " << setw(3) << x << ", y: " << setw(3) << y;
+        os << ", w: " << setw(3) << w << ", h: " << setw(3) << h;
+        return os.str();
+    };
 
 protected:
-	int w;
-	int h;
+    int w;
+    int h;
 };
 
 class ccText
 {
 public:
-	ccText(const string &text, int width);
+    ccText(const string &text, int width);
 
-	void SetText(const string &text) { this->text = text; Resize(); };
-	void SetWidth(int width) { this->width = width; Resize(); };
+    void SetText(const string &text) { this->text = text; Resize(); };
+    void SetWidth(int width) { this->width = width; Resize(); };
 
-	int GetWidth(void) { return width; };
+    int GetWidth(void) { return width; };
 
-	void Resize(void);
+    void Resize(void);
 
-	int GetLineCount(void) { return _lines.size(); };
-	string GetLine(int line) { _lines.at(line); return _lines[line]; };
+    int GetLineCount(void) { return _lines.size(); };
+    string GetLine(int line) { _lines.at(line); return _lines[line]; };
 
 protected:
-	int width;
-	string text;
-	vector<string> _lines;
+    int width;
+    string text;
+    vector<string> _lines;
 };
 
 class ccTimer : public ccThread
 {
 public:
-	ccTimer(ccEventClient *parent, bool one_shot = false);
-	~ccTimer() { Stop(); };
+    ccTimer(ccEventClient *parent, bool one_shot = false);
+    ~ccTimer() { Stop(); };
 
-	bool Start(uint32_t usec);
-	bool Stop(void);
-	bool IsRunning(void) { return running; };
+    bool Start(uint32_t usec);
+    bool Stop(void);
+    bool IsRunning(void) { return running; };
 
-	void *Entry(void);
+    void *Entry(void);
 
 protected:
-	ccEventClient *parent;
-	bool one_shot;
-	bool running;
-	uint32_t usec;
+    ccEventClient *parent;
+    bool one_shot;
+    bool running;
+    uint32_t usec;
 };
 
 class ccThreadLogin : public ccThread
 {
 public:
-	ccThreadLogin(const string &user, const string &passwd);
-	void *Entry(void);
+    ccThreadLogin(const string &user, const string &passwd);
+    void *Entry(void);
 
 protected:
     string user;
@@ -429,282 +433,282 @@ protected:
 class ccWindow : public ccEventClient
 {
 public:
-	ccWindow(ccWindow *parent, const ccSize &size, int bg_cp = -1);
-	virtual ~ccWindow();
+    ccWindow(ccWindow *parent, const ccSize &size, int bg_cp = -1);
+    virtual ~ccWindow();
 
-	ccSize& GetSize(void) { return size; };
-	void SetSize(const ccSize &size)
-	{
-		this->size = size;
-		mvwin(window, this->size.GetY(), this->size.GetX());
-	};
+    ccSize& GetSize(void) { return size; };
+    void SetSize(const ccSize &size)
+    {
+        this->size = size;
+        mvwin(window, this->size.GetY(), this->size.GetX());
+    };
 
-	virtual void Draw(void);
-	virtual void Refresh(void);
-	virtual void Resize(void) { };
+    virtual void Draw(void);
+    virtual void Refresh(void);
+    virtual void Resize(void) { };
 
-	bool IsVisible(void) { return visible; };
-	virtual void SetVisible(bool visible = true)
-	{
-		this->visible = visible;
-		if(parent) parent->Clear();
-	};
+    bool IsVisible(void) { return visible; };
+    virtual void SetVisible(bool visible = true)
+    {
+        this->visible = visible;
+        if(parent) parent->Clear();
+    };
 
-	void Clear(void) { if(window) wclear(window); };
-	void CenterOnParent(void);
-	void SetBackgroundPair(int bg_cp)
-	{
-		this->bg_cp = bg_cp; wbkgd(window, COLOR_PAIR(bg_cp));
-	};
+    void Clear(void) { if(window) wclear(window); };
+    void CenterOnParent(void);
+    void SetBackgroundPair(int bg_cp)
+    {
+        this->bg_cp = bg_cp; wbkgd(window, COLOR_PAIR(bg_cp));
+    };
 
 protected:
-	ccWindow *parent;
-	ccSize size;
-	WINDOW *window;
-	int bg_cp;
-	bool visible;
-	vector<ccWindow *> child;
+    ccWindow *parent;
+    ccSize size;
+    WINDOW *window;
+    int bg_cp;
+    bool visible;
+    vector<ccWindow *> child;
 
-	void AddChild(ccWindow *w) { child.push_back(w); };
-	void RemoveChild(ccWindow *w);
+    void AddChild(ccWindow *w) { child.push_back(w); };
+    void RemoveChild(ccWindow *w);
 };
 
 class ccButton
 {
 public:
-	ccButton(ccButtonId id, const string &label)
-		: id(id), label(label), focus(false) { };
+    ccButton(ccButtonId id, const string &label)
+        : id(id), label(label), focus(false) { };
 
-	ccButtonId GetId(void) { return id; };
-	string GetLabel(void) { return label; };
+    ccButtonId GetId(void) { return id; };
+    string GetLabel(void) { return label; };
 
-	void SetFocus(bool focus = true) { this->focus = focus; };
-	bool HasFocus(void) { return focus; };
+    void SetFocus(bool focus = true) { this->focus = focus; };
+    bool HasFocus(void) { return focus; };
 
 protected:
-	ccButtonId id;
-	string label;
-	bool focus;
+    ccButtonId id;
+    string label;
+    bool focus;
 };
 
-#define ccINPUT_READONLY		0x0001
-#define ccINPUT_PASSWORD		0x0002
+#define ccINPUT_READONLY        0x0001
+#define ccINPUT_PASSWORD        0x0002
 
 class ccInputBox : public ccWindow
 {
 public:
-	ccInputBox(ccWindow *parent, const ccSize &size, const string &value = "");
-	~ccInputBox();
+    ccInputBox(ccWindow *parent, const ccSize &size, const string &value = "");
+    ~ccInputBox();
 
-	void SetReadOnly(bool readonly = true)
-	{
-		if (readonly) style |= ccINPUT_READONLY;
-		else style &= ~ccINPUT_READONLY;
-	};
-	bool IsReadOnly(void) { return (bool)(style & ccINPUT_READONLY); };
+    void SetReadOnly(bool readonly = true)
+    {
+        if (readonly) style |= ccINPUT_READONLY;
+        else style &= ~ccINPUT_READONLY;
+    };
+    bool IsReadOnly(void) { return (bool)(style & ccINPUT_READONLY); };
 
-	void SetPassword(bool password = true)
-	{
-		if (password) style |= ccINPUT_PASSWORD;
-		else style &= ~ccINPUT_PASSWORD;
-	};
-	bool IsPassword(void) { return (bool)(style & ccINPUT_PASSWORD); };
+    void SetPassword(bool password = true)
+    {
+        if (password) style |= ccINPUT_PASSWORD;
+        else style &= ~ccINPUT_PASSWORD;
+    };
+    bool IsPassword(void) { return (bool)(style & ccINPUT_PASSWORD); };
 
-	void SetValue(const string &value) { this->value = value; };
-	string GetValue(void) { return value; };
+    void SetValue(const string &value) { this->value = value; };
+    string GetValue(void) { return value; };
 
-	void Draw(void);
-	bool HandleEvent(ccEvent *event);
+    void Draw(void);
+    bool HandleEvent(ccEvent *event);
 
 protected:
-	string value;
-	uint32_t style;
-	bool focus;
-	size_t cpos;
+    string value;
+    uint32_t style;
+    bool focus;
+    size_t cpos;
 };
 
 class ccProgressBar : public ccWindow
 {
 public:
-	ccProgressBar(ccWindow *parent, const ccSize &size);
-	~ccProgressBar();
+    ccProgressBar(ccWindow *parent, const ccSize &size);
+    ~ccProgressBar();
 
-	void SetRange(uint32_t value) { this->mvalue = value; };
-	void Update(uint32_t value);
+    void SetRange(uint32_t value) { this->mvalue = value; };
+    void Update(uint32_t value);
 
-	void Draw(void);
+    void Draw(void);
 
 protected:
-	uint32_t cvalue;
-	uint32_t mvalue;
+    uint32_t cvalue;
+    uint32_t mvalue;
 };
 
 class ccDialog : public ccWindow
 {
 public:
-	ccDialog(ccWindow *parent, const ccSize &size, const string &title, const string &blurb);
-	~ccDialog();
+    ccDialog(ccWindow *parent, const ccSize &size, const string &title, const string &blurb);
+    ~ccDialog();
 
-	void SetBlurb(const string &blurb) { this->blurb->SetText(blurb); Draw(); };
+    void SetBlurb(const string &blurb) { this->blurb->SetText(blurb); Draw(); };
 
-	void SetUserId(int id) { user_id = id; };
-	int GetUserId(void) { return user_id; };
+    void SetUserId(int id) { user_id = id; };
+    int GetUserId(void) { return user_id; };
 
-	virtual void Draw(void);
-	bool HandleEvent(ccEvent *event);
-	virtual void Resize(void) { CenterOnParent(); };
+    virtual void Draw(void);
+    bool HandleEvent(ccEvent *event);
+    virtual void Resize(void) { CenterOnParent(); };
 
-	ccButtonId GetFocus(void);
+    ccButtonId GetFocus(void);
 
-	void SetFocus(int index);
-	void SetFocus(ccButtonId id);
+    void SetFocus(int index);
+    void SetFocus(ccButtonId id);
 
-	ccButtonId FocusNext(void);
-	ccButtonId FocusPrevious(void);
+    ccButtonId FocusNext(void);
+    ccButtonId FocusPrevious(void);
 
-	void SetSelected(void);
-	ccButtonId GetSelected(void) { return selected; };
+    void SetSelected(void);
+    ccButtonId GetSelected(void) { return selected; };
 
-	void AppendButton(ccButtonId id, const string &label, bool focus = false);
+    void AppendButton(ccButtonId id, const string &label, bool focus = false);
 
 protected:
-	int user_id;
-	int button_width;
-	ccButtonId selected;
-	string title;
-	ccText *blurb;
-	vector<ccButton *> button;
+    int user_id;
+    int button_width;
+    ccButtonId selected;
+    string title;
+    ccText *blurb;
+    vector<ccButton *> button;
 };
 
 class ccDialogLogin : public ccDialog
 {
 public:
-	ccDialogLogin(ccWindow *parent);
+    ccDialogLogin(ccWindow *parent);
 
-	string GetPassword(void) { return passwd->GetValue(); };
-	virtual void Resize(void)
-	{
-		CenterOnParent();
+    string GetPassword(void) { return passwd->GetValue(); };
+    virtual void Resize(void)
+    {
+        CenterOnParent();
 
-		passwd->CenterOnParent();
-		ccSize _size = passwd->GetSize();
-		_size.SetY(_size.GetY() + 1);
-		passwd->SetSize(_size);
-	}
+        passwd->CenterOnParent();
+        ccSize _size = passwd->GetSize();
+        _size.SetY(_size.GetY() + 1);
+        passwd->SetSize(_size);
+    }
 
 protected:
-	ccInputBox *passwd;
+    ccInputBox *passwd;
 };
 
 class ccDialogProgress : public ccDialog
 {
 public:
-	ccDialogProgress(ccWindow *parent, const string &title, bool install = true);
+    ccDialogProgress(ccWindow *parent, const string &title, bool install = true);
 
-	virtual void Resize(void)
-	{
-		CenterOnParent();
-		if (install) {
-			progress1->CenterOnParent();
-			ccSize _size = progress1->GetSize();
-			_size.SetY(_size.GetY() + 1);
-			progress1->SetSize(_size);
+    virtual void Resize(void)
+    {
+        CenterOnParent();
+        if (install) {
+            progress1->CenterOnParent();
+            ccSize _size = progress1->GetSize();
+            _size.SetY(_size.GetY() + 1);
+            progress1->SetSize(_size);
 
-			progress2->CenterOnParent();
-			_size = progress2->GetSize();
-			_size.SetY(_size.GetY() + 3);
-			progress2->SetSize(_size);
-		}
+            progress2->CenterOnParent();
+            _size = progress2->GetSize();
+            _size.SetY(_size.GetY() + 3);
+            progress2->SetSize(_size);
+        }
         else {
-			progress1->CenterOnParent();
-			ccSize _size = progress1->GetSize();
-			_size.SetY(_size.GetY() + 2);
-			progress1->SetSize(_size);
-		}
-	};
+            progress1->CenterOnParent();
+            ccSize _size = progress1->GetSize();
+            _size.SetY(_size.GetY() + 2);
+            progress1->SetSize(_size);
+        }
+    };
 
-	void Update(const string &update);
+    void Update(const string &update);
 
 protected:
-	bool install;
-	ccProgressBar *progress1;
-	ccProgressBar *progress2;
+    bool install;
+    ccProgressBar *progress1;
+    ccProgressBar *progress2;
 };
 
 class ccMenuItem;
 
 enum ccMenuId
 {
-	ccMENU_ID_INVALID = -1,
-	ccMENU_ID_CON_GUI,
-	ccMENU_ID_CON_GUI_REMOVE,
-	ccMENU_ID_UTIL_IPTRAF,
-	ccMENU_ID_SYS_REBOOT,
-	ccMENU_ID_SYS_SHUTDOWN,
-	ccMENU_ID_LOGOUT,
-	ccMENU_ID_SEPERATOR = 0xff
+    ccMENU_ID_INVALID = -1,
+    ccMENU_ID_CON_GUI,
+    ccMENU_ID_CON_GUI_REMOVE,
+    ccMENU_ID_UTIL_IPTRAF,
+    ccMENU_ID_SYS_REBOOT,
+    ccMENU_ID_SYS_SHUTDOWN,
+    ccMENU_ID_LOGOUT,
+    ccMENU_ID_SEPERATOR = 0xff
 };
 
 class ccMenu : public ccWindow
 {
 public:
-	ccMenu(ccWindow *parent, const ccSize &size, const string &title);
-	~ccMenu();
+    ccMenu(ccWindow *parent, const ccSize &size, const string &title);
+    ~ccMenu();
 
-	void Draw(void);
-	void Resize(void);
-	bool HandleEvent(ccEvent *event);
+    void Draw(void);
+    void Resize(void);
+    bool HandleEvent(ccEvent *event);
 
-	void InsertItem(ccMenuItem *item);
-	void RemoveItem(ccMenuId id);
-	void SetItemVisible(ccMenuId id, bool visible = true);
-	void SelectItem(ccMenuId id);
-	bool SelectItem(int hotkey);
-	void SelectFirst(void);
-	void SelectNext(void);
-	void SelectPrevious(void);
-	ccMenuId GetSelected(void);
+    void InsertItem(ccMenuItem *item);
+    void RemoveItem(ccMenuId id);
+    void SetItemVisible(ccMenuId id, bool visible = true);
+    void SelectItem(ccMenuId id);
+    bool SelectItem(int hotkey);
+    void SelectFirst(void);
+    void SelectNext(void);
+    void SelectPrevious(void);
+    ccMenuId GetSelected(void);
 
 protected:
-	string title;
-	string blurb;
-	int menu_width;
-	vector<ccMenuItem *> item;
+    string title;
+    string blurb;
+    int menu_width;
+    vector<ccMenuItem *> item;
 
-	void CalcMenuWidth(void);
+    void CalcMenuWidth(void);
 };
 
 class ccMenuItem
 {
 public:
-	ccMenuItem(ccMenuId id, const string &title, int hotkey = 0, const string &hotkey_title = "");
+    ccMenuItem(ccMenuId id, const string &title, int hotkey = 0, const string &hotkey_title = "");
 
-	ccMenuId GetId(void) { return id; };
-	string GetTitle(void) { return title; };
-	int GetHotkey(void) { return hotkey; };
-	string GetHotkeyTitle(void) { return hotkey_title; };
-	void SetSelected(bool selected = true) { this->selected = selected; };
-	bool IsSelected(void) { return selected; };
-	virtual bool IsSeperator(void) { return false; };
+    ccMenuId GetId(void) { return id; };
+    string GetTitle(void) { return title; };
+    int GetHotkey(void) { return hotkey; };
+    string GetHotkeyTitle(void) { return hotkey_title; };
+    void SetSelected(bool selected = true) { this->selected = selected; };
+    bool IsSelected(void) { return selected; };
+    virtual bool IsSeperator(void) { return false; };
 
-	void SetVisible(bool visible = true) { this->visible = visible; };
-	bool IsVisible(void) { return visible; };
+    void SetVisible(bool visible = true) { this->visible = visible; };
+    bool IsVisible(void) { return visible; };
 
 protected:
-	ccMenuId id;
-	bool selected;
-	bool visible;
-	string title;
-	string hotkey_title;
-	int hotkey;
+    ccMenuId id;
+    bool selected;
+    bool visible;
+    string title;
+    string hotkey_title;
+    int hotkey;
 };
 
 class ccMenuSpacer : public ccMenuItem
 {
 public:
-	ccMenuSpacer(void) : ccMenuItem(ccMENU_ID_SEPERATOR, "") { };
+    ccMenuSpacer(void) : ccMenuItem(ccMENU_ID_SEPERATOR, "") { };
 
-	bool IsSeperator(void) { return true; };
+    bool IsSeperator(void) { return true; };
 };
 
 class ccThreadEvent;
@@ -715,74 +719,74 @@ class ccProcessPipe;
 class ccConsole : public ccWindow
 {
 public:
-	ccConsole();
-	~ccConsole();
+    ccConsole();
+    ~ccConsole();
 
-	static ccConsole *Instance(void);
+    static ccConsole *Instance(void);
 
-	int EventLoop(void);
-	bool HandleEvent(ccEvent *event);
+    int EventLoop(void);
+    bool HandleEvent(ccEvent *event);
 
-	void Draw(void);
-	void Refresh(void);
-	void Resize(void);
+    void Draw(void);
+    void Refresh(void);
+    void Resize(void);
 
-	void ResetActivityTimer(void)
-	{
-		timer_lock.Lock();
-		activity = 0;
-		timer_lock.Unlock();
-	};
+    void ResetActivityTimer(void)
+    {
+        timer_lock.Lock();
+        activity = 0;
+        timer_lock.Unlock();
+    };
 
 protected:
-	bool run;
-	bool sleep_mode;
-	ccMutex ncurses_lock;
-	ccMutex timer_lock;
-	static ccConsole *instance;
-	ccThreadUpdate *update_thread;
-	ccThreadLogin *login_thread;
-	string hostname;
-	string release;
-	string clock;
-	string uptime;
-	string load_average;
-	int load_average_color;
-	string idle;
-	ccProcessExec *proc_exec;
-	ccProcessPipe *proc_pipe;
-	ccMenu *menu;
-	ccDialog *dialog;
-	ccDialogLogin *login;
-	ccDialogProgress *progress;
-	time_t activity;
+    bool run;
+    bool sleep_mode;
+    ccMutex ncurses_lock;
+    ccMutex timer_lock;
+    static ccConsole *instance;
+    ccThreadUpdate *update_thread;
+    ccThreadLogin *login_thread;
+    string hostname;
+    string release;
+    string clock;
+    string uptime;
+    string load_average;
+    int load_average_color;
+    string idle;
+    ccProcessExec *proc_exec;
+    ccProcessPipe *proc_pipe;
+    ccMenu *menu;
+    ccDialog *dialog;
+    ccDialogLogin *login;
+    ccDialogProgress *progress;
+    time_t activity;
 
-	bool UpdateGraphicalConsoleItems(void);
-	void LaunchProcess(ccMenuId id);
+    bool UpdateGraphicalConsoleItems(void);
+    void LaunchProcess(ccMenuId id);
 };
 
 class ccThreadEvent : public ccThread
 {
 public:
-	ccThreadEvent(void);
-	~ccThreadEvent();
+    ccThreadEvent(void);
+    ~ccThreadEvent();
 
-	void *Entry(void);
+    void *Entry(void);
 
 protected:
-	ccEventServer *server;
+    ccEventServer *server;
 };
 
 class ccThreadUpdate : public ccThread
 {
 public:
-	ccThreadUpdate(void);
-	~ccThreadUpdate();
+    ccThreadUpdate(void);
+    ~ccThreadUpdate();
 
-	void *Entry(void);
+    void *Entry(void);
 
 protected:
-	ccEventSysInfo event_sysinfo;
+    ccEventSysInfo event_sysinfo;
 };
 
 class ccThreadProcessBase;
@@ -792,93 +796,93 @@ class ccThreadProcessPipe;
 class ccProcessBase
 {
 public:
-	ccProcessBase(const string &path, const vector<string> &arg);
-	~ccProcessBase();
+    ccProcessBase(const string &path, const vector<string> &arg);
+    ~ccProcessBase();
 
-	virtual void Execute(void) { thread = NULL; };
+    virtual void Execute(void) { thread = NULL; };
 
-	string GetPath(void) { return path; };
-	int GetExitStatus(void)
-	{
-		ccMutexLocker locker(lock);
-		return status;
-	};
+    string GetPath(void) { return path; };
+    int GetExitStatus(void)
+    {
+        ccMutexLocker locker(lock);
+        return status;
+    };
 
 protected:
-	friend class ccThreadProcessBase;
-	friend class ccThreadProcessExec;
-	friend class ccThreadProcessPipe;
+    friend class ccThreadProcessBase;
+    friend class ccThreadProcessExec;
+    friend class ccThreadProcessPipe;
 
-	char **argv;
-	string path;
-	int status;
-	ccThreadProcessBase *thread;
-	ccMutex lock;
+    char **argv;
+    string path;
+    int status;
+    ccThreadProcessBase *thread;
+    ccMutex lock;
 };
 
 class ccProcessExec : public ccProcessBase
 {
 public:
-	ccProcessExec(const string &path, const vector<string> &arg, bool signal_trap = true);
+    ccProcessExec(const string &path, const vector<string> &arg, bool signal_trap = true);
 
-	void Execute(void);
+    void Execute(void);
 
-	pid_t GetId(void) { return pid; };
+    pid_t GetId(void) { return pid; };
 
 protected:
-	friend class ccThreadProcessExec;
+    friend class ccThreadProcessExec;
 
-	pid_t pid;
-	bool signal_trap;
+    pid_t pid;
+    bool signal_trap;
 };
 
 class ccProcessPipe : public ccProcessBase
 {
 public:
-	ccProcessPipe(const string &path, const vector<string> &arg);
+    ccProcessPipe(const string &path, const vector<string> &arg);
 
-	void Execute(void);
-	static int Execute(const string &path, vector<string> &output);
+    void Execute(void);
+    static int Execute(const string &path, vector<string> &output);
 
-	FILE *GetId(void) { return ph; };
+    FILE *GetId(void) { return ph; };
 
 protected:
-	friend class ccThreadProcessPipe;
+    friend class ccThreadProcessPipe;
 
-	FILE *ph;
+    FILE *ph;
 };
 
 class ccThreadProcessBase : public ccThread
 {
 public:
-	ccThreadProcessBase(ccEventClient *parent);
+    ccThreadProcessBase(ccEventClient *parent);
 
-	virtual void *Entry(void) { return NULL; };
+    virtual void *Entry(void) { return NULL; };
 
 protected:
-	ccEventClient *parent;
+    ccEventClient *parent;
 };
 
 class ccThreadProcessExec : public ccThreadProcessBase
 {
 public:
-	ccThreadProcessExec(ccEventClient *parent, ccProcessExec *process);
+    ccThreadProcessExec(ccEventClient *parent, ccProcessExec *process);
 
-	void *Entry(void);
+    void *Entry(void);
 
 protected:
-	ccProcessExec *process;
+    ccProcessExec *process;
 };
 
 class ccThreadProcessPipe : public ccThreadProcessBase
 {
 public:
-	ccThreadProcessPipe(ccEventClient *parent, ccProcessPipe *process);
+    ccThreadProcessPipe(ccEventClient *parent, ccProcessPipe *process);
 
-	void *Entry(void);
+    void *Entry(void);
 
 protected:
-	ccProcessPipe *process;
+    ccProcessPipe *process;
 };
 
 #endif
