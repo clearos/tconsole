@@ -6,6 +6,10 @@
 
 #include <regex.h>
 
+#ifndef LAN_IP_REFRESH_INT
+#define LAN_IP_REFRESH_INT       15
+#endif
+
 using namespace std;
 
 class ccRegEx

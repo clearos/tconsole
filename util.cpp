@@ -8,6 +8,8 @@
 #include <string.h>
 #include <stdio.h>
 
+#include <netinet/in.h>
+
 #include <string>
 #include <sstream>
 
@@ -206,8 +208,18 @@ const char *ccFile::Read(const char *filename)
     return (const char *)buffer;
 }
 
+// XXX: Not thread-safe!
 void ccGetLanIp(const char *command, string &ip)
 {
+    static time_t last_refresh = 0;
+    static char last_ip[INET6_ADDRSTRLEN];
+
+    if (last_refresh != 0 &&
+        last_refresh + LAN_IP_REFRESH_INT > time(NULL)) {
+        ip.assign(last_ip);
+        return;
+    }
+
     ccRegEx rx("^([0-9a-F:\\.]*)", 2);
     FILE *ph = popen(command, "r");
 
@@ -218,8 +230,14 @@ void ccGetLanIp(const char *command, string &ip)
         if (fgets(buffer, sizeof(buffer) - 1, ph) &&
             rx.Execute(buffer) == 0)
             ip = rx.GetMatch(1);
-        pclose(ph);
+        if (pclose(ph) != 0) {
+            // XXX: Something went wrong -- try again ASAP.
+            return;
+        }
     }
+
+    last_refresh = time(NULL);
+    strncpy(last_ip, ip.c_str(), INET6_ADDRSTRLEN);
 }
 
 // vi: ts=4
