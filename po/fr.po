@@ -112,8 +112,7 @@ msgstr "URL de Configuration"
 
 #: tconsole.cpp:1590
 msgid "Press Alt-F2 to Alt-F6 for additional shell terminals."
-msgstr ""
-"Appuyez sur Alt-F2 pour Alt-F6 pour les terminaux shell supplémentaires"
+msgstr "Appuyez sur Alt-F2 pour Alt-F6 pour les terminaux shell supplémentaire"
 
 #: tconsole.cpp:1652
 msgid "Removing Packages"
