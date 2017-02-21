@@ -1,7 +1,7 @@
 # Text console RPM spec
 Name: tconsole
 Version: 3.3
-Release: 1%{dist}
+Release: 2%{dist}
 Vendor: ClearFoundation
 License: GPL
 Group: System Environment/Daemons
@@ -13,6 +13,7 @@ Requires: sudo
 Summary: Text-based console tool
 BuildRequires: autoconf >= 2.63
 BuildRequires: automake
+BuildRequires: gettext
 BuildRequires: libtool
 BuildRequires: ncurses-devel
 
@@ -32,13 +33,14 @@ make %{?_smp_mflags}
 # Install
 %install
 make install DESTDIR=$RPM_BUILD_ROOT
+%find_lang %{name}
 
 # Clean-up
 %clean
 [ "$RPM_BUILD_ROOT" != "/" ] && rm -rf $RPM_BUILD_ROOT
 
 # Files
-%files
+%files -f %{name}.lang
 %defattr(-,root,root)
 %{_bindir}/start-gconsole
 %{_sbindir}/tc-yum
