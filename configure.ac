@@ -7,6 +7,9 @@ AM_INIT_AUTOMAKE
 AC_CONFIG_SRCDIR([tconsole.h])
 AC_CONFIG_HEADERS([config.h])
 
+AM_GNU_GETTEXT([external])
+AM_GNU_GETTEXT_VERSION([0.18.2])
+
 # Checks for programs.
 AC_PROG_CXX
 
@@ -33,5 +36,5 @@ AC_FUNC_MMAP
 AC_FUNC_REALLOC
 AC_CHECK_FUNCS([getpagesize memset munmap regcomp setenv setlocale strerror strtol])
 
-AC_CONFIG_FILES([tconsole.spec Makefile utils/Makefile])
+AC_CONFIG_FILES([tconsole.spec Makefile utils/Makefile po/Makefile.in po/Makefile.in])
 AC_OUTPUT

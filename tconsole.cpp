@@ -21,6 +21,8 @@
 
 #include <ncursesw/ncurses.h>
 
+#include "gettext.h"
+
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -838,10 +840,10 @@ void ccDialog::AppendButton(ccButtonId id, const string &label, bool focus)
 }
 
 ccDialogLogin::ccDialogLogin(ccWindow *parent)
-    : ccDialog(parent, ccSize(0, 0, 42, 12), "Login", "Administrator password:")
+    : ccDialog(parent, ccSize(0, 0, 42, 12), _("Login"), _("Administrator password:"))
 {
     SetBackgroundPair(9);
-    AppendButton(ccBUTTON_ID_LOGIN, "Login", true);
+    AppendButton(ccBUTTON_ID_LOGIN, _("Login"), true);
 
     passwd = new ccInputBox(this, ccSize(0, 0, 32, 1));
     passwd->SetPassword();
@@ -873,8 +875,8 @@ void ccDialogProgress::Update(const string &update)
     if (install && downloading.Execute(update.c_str()) == 0) {
         ostringstream os;
         os << downloading.GetMatch(1);
-        os << " package " << downloading.GetMatch(2);
-        os << " of " << downloading.GetMatch(3) << ":";
+        os << " " << _("package") << " " << downloading.GetMatch(2);
+        os << " " << _("of") << " " << downloading.GetMatch(3) << ":";
         SetBlurb(os.str());
         progress1->SetRange(100);
         progress1->Update(atoi(downloading.GetMatch(4)));
@@ -899,7 +901,7 @@ void ccDialogProgress::Update(const string &update)
         progress1->SetRange(atoi(removing.GetMatch(4)));
         progress1->Update(atoi(removing.GetMatch(3)));
     }
-    else SetBlurb("Preparing...");
+    else SetBlurb(_("Preparing..."));
 }
 
 ccMenu::ccMenu(ccWindow *parent, const ccSize &size, const string &title)
@@ -1168,24 +1170,24 @@ ccConsole::ccConsole()
     keypad(stdscr, TRUE);
 
     ccSize menu_size(20, 7, 40, 10);
-    menu = new ccMenu(this, menu_size, "Welcome!");
+    menu = new ccMenu(this, menu_size, _("Welcome!"));
     menu->SetVisible(false);
 
     menu->InsertItem(new ccMenuItem(ccMENU_ID_CON_GUI,
-        "Launch Graphics-mode Console", 0x10a, "F2"));
+        _("Launch Graphics-mode Console"), 0x10a, "F2"));
     menu->InsertItem(new ccMenuItem(ccMENU_ID_CON_GUI_REMOVE,
-        "Remove Graphics-mode Console"));
+        _("Remove Graphics-mode Console")));
     menu->InsertItem(new ccMenuSpacer());
     menu->InsertItem(new ccMenuItem(ccMENU_ID_UTIL_IPTRAF,
-        "Network Analyzer (IPTraf)", 0x10c, "F4"));
+        _("Network Analyzer (IPTraf)"), 0x10c, "F4"));
     menu->InsertItem(new ccMenuSpacer());
     menu->InsertItem(new ccMenuItem(ccMENU_ID_SYS_REBOOT,
-        "System Restart (Reboot)"));
+        _("System Restart (Reboot)")));
     menu->InsertItem(new ccMenuItem(ccMENU_ID_SYS_SHUTDOWN,
-        "System Shutdown (Halt)"));
+        _("System Shutdown (Halt)")));
     menu->InsertItem(new ccMenuSpacer());
     menu->InsertItem(new ccMenuItem(ccMENU_ID_LOGOUT,
-        "Logout"));
+        _("Logout")));
 
     if (UpdateGraphicalConsoleItems()) {
         struct stat gcon_stat;
@@ -1266,7 +1268,7 @@ int ccConsole::EventLoop(void)
                     ncurses_lock.Unlock();
                 }
 
-                ccEventFault *event = new ccEventFault("Access denied");
+                ccEventFault *event = new ccEventFault(_("Access denied"));
                 ccEventServer::Instance()->PostEvent(event);
             }
 
@@ -1321,15 +1323,15 @@ bool ccConsole::HandleEvent(ccEvent *event)
                 menu->GetSelected() == ccMENU_ID_SYS_SHUTDOWN) {
                 string blurb;
                 if (menu->GetSelected() == ccMENU_ID_SYS_REBOOT)
-                    blurb = "Are you sure you want to restart?";
+                    blurb = _("Are you sure you want to restart?");
                 else
-                    blurb = "Are you sure you want to shutdown?";
+                    blurb = _("Are you sure you want to shutdown?");
 
-                dialog = new ccDialog(this, ccSize(0, 0, 40, 11), "Warning!", blurb);
+                dialog = new ccDialog(this, ccSize(0, 0, 40, 11), _("Warning!"), blurb);
                 dialog->SetUserId(menu->GetSelected());
                 dialog->SetBackgroundPair(9);
-                dialog->AppendButton(ccBUTTON_ID_YES, "Yes");
-                dialog->AppendButton(ccBUTTON_ID_NO, "No", true);
+                dialog->AppendButton(ccBUTTON_ID_YES, _("Yes"));
+                dialog->AppendButton(ccBUTTON_ID_NO, _("No"), true);
 
                 Draw();
                 return true;
@@ -1458,7 +1460,7 @@ bool ccConsole::HandleEvent(ccEvent *event)
         cerr << "Application fault: ";
         cerr << event_fault->GetReason() << endl;
 
-        if (event_fault->GetReason() == string("Access denied")) {
+        if (event_fault->GetReason() == string(_("Access denied"))) {
             bool draw = false;
 
             idle_pause = true;
@@ -1475,7 +1477,7 @@ bool ccConsole::HandleEvent(ccEvent *event)
 
             Draw();
         }
-        else if (event_fault->GetReason() == string("Authenticated")) {
+        else if (event_fault->GetReason() == string(_("Authenticated"))) {
             idle_pause = false;
             login_thread->Wait();
             delete login_thread;
@@ -1557,8 +1559,8 @@ void ccConsole::Draw(void)
 
     if (load_average.size()) {
         wmove(window, size.GetHeight() - 1,
-            size.GetWidth() - (string("Load Average: ").size() + load_average.size()));
-        wprintw(window, "Load Average: ");
+            size.GetWidth() - (string(_("Load Average: ")).size() + load_average.size()));
+        wprintw(window, _("Load Average: "));
         wcolor_set(window, load_average_color, NULL);
         wprintw(window, load_average.c_str());
         wcolor_set(window, 1, NULL);
@@ -1566,20 +1568,20 @@ void ccConsole::Draw(void)
 
     if (idle.size()) {
         wmove(window, size.GetHeight() - 1,
-            (size.GetWidth() - (string("Idle: %").size() + idle.size())) / 2);
-        wprintw(window, "Idle: %s%%", idle.c_str());
+            (size.GetWidth() - (string(_("Idle: %")).size() + idle.size())) / 2);
+        wprintw(window, _("Idle: %s%%"), idle.c_str());
     }
 
     string lan_ip;
     ccGetLanIp(PATH_NETWORK, lan_ip);
 
     ostringstream url;
-    url << "Configuration URL: https://";
+    url << _("Configuration URL") << ": https://";
     url << lan_ip << ":81/";
     wmove(window, size.GetHeight() - 5, (size.GetWidth() - url.str().size()) / 2);
     wprintw(window, url.str().c_str());
 
-    string keys("Press Alt-F2 to Alt-F6 for additional shell terminals.");
+    string keys(_("Press Alt-F2 to Alt-F6 for additional shell terminals."));
     wmove(window, size.GetHeight() - 4, (size.GetWidth() - keys.size()) / 2);
     wprintw(window, keys.c_str());
     
@@ -1641,7 +1643,7 @@ void ccConsole::LaunchProcess(ccMenuId id)
         break;
 
     case ccMENU_ID_CON_GUI_REMOVE:
-        progress = new ccDialogProgress(this, "Removing Packages", false);
+        progress = new ccDialogProgress(this, _("Removing Packages"), false);
 
         path = PATH_SUDO " " PATH_TCONSOLE_YUM " remove";
         if (proc_pipe) delete proc_pipe;
@@ -1696,19 +1698,19 @@ void *ccThreadLogin::Entry(void)
 
     FILE *ph = popen(PATH_SUDO " " PATH_APP_PASSWD, "w");
     if (!ph) {
-        ccEventFault *event = new ccEventFault("Access denied");
+        ccEventFault *event = new ccEventFault(_("Access denied"));
         ccEventServer::Instance()->PostEvent(event);
     }
     fprintf(ph, "%s %s", user.c_str(), passwd.c_str());
     fflush(ph);
     int rc = pclose(ph);
     if (rc == 0) {
-        ccEventFault *event = new ccEventFault("Authenticated");
+        ccEventFault *event = new ccEventFault(_("Authenticated"));
         ccEventServer::Instance()->PostEvent(event);
         return NULL;
     }
 
-    ccEventFault *event = new ccEventFault("Access denied");
+    ccEventFault *event = new ccEventFault(_("Access denied"));
     ccEventServer::Instance()->PostEvent(event);
     return NULL;
 }

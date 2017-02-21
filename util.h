@@ -10,6 +10,8 @@
 #define LAN_IP_REFRESH_INT       15
 #endif
 
+#define _(STRING) gettext(STRING)
+
 using namespace std;
 
 class ccRegEx
