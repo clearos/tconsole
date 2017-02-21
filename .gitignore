@@ -22,5 +22,6 @@ missing
 stamp-h1
 *.tar.gz
 tconsole
+tconsole.lang
 utils/Makefile
 utils/Makefile.in

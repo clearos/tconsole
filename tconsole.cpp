@@ -122,6 +122,8 @@ int main(int argc, char *argv[])
         fd = open(debug, O_WRONLY | O_APPEND | O_CREAT, S_IRUSR | S_IWUSR);
 
     setlocale(LC_ALL, "");
+    bindtextdomain(PACKAGE, "/usr/share/locale");
+    textdomain(PACKAGE);
 
     cerr << "tConsole v" << VERSION << endl;
     ccThreadEvent *event_thread = new ccThreadEvent();
