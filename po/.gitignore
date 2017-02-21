@@ -1,0 +1,8 @@
+en@quot.gmo
+en@quot.insert-header
+en@quot.po
+Makevars.template
+POTFILES
+remove-potcdate.sed
+stamp-po
+tconsole.pot
