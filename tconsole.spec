@@ -1,7 +1,7 @@
 # Text console RPM spec
 Name: tconsole
-Version: 3.2
-Release: 2%{dist}
+Version: 3.3
+Release: 1%{dist}
 Vendor: ClearFoundation
 License: GPL
 Group: System Environment/Daemons
