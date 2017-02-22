@@ -21,11 +21,11 @@
 
 #include <ncursesw/ncurses.h>
 
-#include "gettext.h"
-
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
+
+#include "gettext.h"
 
 #include "tconsole.h"
 #include "thread.h"
@@ -55,7 +55,13 @@ int main(int argc, char *argv[])
     const char *devnull = "/dev/null";
     const char *debug = devnull;
     int exit_code = 0;
-
+#ifdef ENABLE_NLS
+    setlocale(LC_ALL, "");
+    bindtextdomain(PACKAGE, LOCALEDIR);
+    textdomain(PACKAGE);
+#else
+    setlocale(LC_ALL, "C");
+#endif
     for ( ;; ) {
         int rc, o = 0;
 
@@ -120,10 +126,6 @@ int main(int argc, char *argv[])
 
     if (fd == -1)
         fd = open(debug, O_WRONLY | O_APPEND | O_CREAT, S_IRUSR | S_IWUSR);
-
-    setlocale(LC_ALL, "");
-    bindtextdomain(PACKAGE, "/usr/share/locale");
-    textdomain(PACKAGE);
 
     cerr << "tConsole v" << VERSION << endl;
     ccThreadEvent *event_thread = new ccThreadEvent();
@@ -1556,7 +1558,7 @@ void ccConsole::Draw(void)
     if (uptime.size()) {
         wmove(window, size.GetHeight() - 1, 0);
         wclrtoeol(window);
-        wprintw(window, "Uptime: %s", uptime.c_str());
+        wprintw(window, _("Uptime: %s"), uptime.c_str());
     }
 
     if (load_average.size()) {

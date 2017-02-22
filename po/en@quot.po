@@ -1,0 +1,150 @@
+# English translations for tconsole package.
+# Copyright (C) 2017 ClearFoundation
+# This file is distributed under the same license as the tconsole package.
+# Automatically generated, 2017.
+#
+# All this catalog "translates" are quotation characters.
+# The msgids must be ASCII and therefore cannot contain real quotation
+# characters, only substitutes like grave accent (0x60), apostrophe (0x27)
+# and double quote (0x22). These substitutes look strange; see
+# http://www.cl.cam.ac.uk/~mgk25/ucs/quotes.html
+#
+# This catalog translates grave accent (0x60) and apostrophe (0x27) to
+# left single quotation mark (U+2018) and right single quotation mark (U+2019).
+# It also translates pairs of apostrophe (0x27) to
+# left single quotation mark (U+2018) and right single quotation mark (U+2019)
+# and pairs of quotation mark (0x22) to
+# left double quotation mark (U+201C) and right double quotation mark (U+201D).
+#
+# When output to an UTF-8 terminal, the quotation characters appear perfectly.
+# When output to an ISO-8859-1 terminal, the single quotation marks are
+# transliterated to apostrophes (by iconv in glibc 2.2 or newer) or to
+# grave/acute accent (by libiconv), and the double quotation marks are
+# transliterated to 0x22.
+# When output to an ASCII terminal, the single quotation marks are
+# transliterated to apostrophes, and the double quotation marks are
+# transliterated to 0x22.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: tconsole 3.3\n"
+"Report-Msgid-Bugs-To: developer@clearfoundation.com\n"
+"POT-Creation-Date: 2017-02-21 19:42-0500\n"
+"PO-Revision-Date: 2017-02-21 14:51-0500\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: en@quot\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: tconsole.cpp:847 tconsole.cpp:850
+msgid "Login"
+msgstr "Login"
+
+#: tconsole.cpp:847
+msgid "Administrator password:"
+msgstr "Administrator password:"
+
+#: tconsole.cpp:882
+msgid "package"
+msgstr "package"
+
+#: tconsole.cpp:883
+msgid "of"
+msgstr "of"
+
+#: tconsole.cpp:908
+msgid "Preparing..."
+msgstr "Preparing..."
+
+#: tconsole.cpp:1177
+msgid "Welcome!"
+msgstr "Welcome!"
+
+#: tconsole.cpp:1181
+msgid "Launch Graphics-mode Console"
+msgstr "Launch Graphics-mode Console"
+
+#: tconsole.cpp:1183
+msgid "Remove Graphics-mode Console"
+msgstr "Remove Graphics-mode Console"
+
+#: tconsole.cpp:1186
+msgid "Network Analyzer (IPTraf)"
+msgstr "Network Analyzer (IPTraf)"
+
+#: tconsole.cpp:1189
+msgid "System Restart (Reboot)"
+msgstr "System Restart (Reboot)"
+
+#: tconsole.cpp:1191
+msgid "System Shutdown (Halt)"
+msgstr "System Shutdown (Halt)"
+
+#: tconsole.cpp:1194
+msgid "Logout"
+msgstr "Logout"
+
+#: tconsole.cpp:1275 tconsole.cpp:1467 tconsole.cpp:1705 tconsole.cpp:1717
+msgid "Access denied"
+msgstr "Access denied"
+
+#: tconsole.cpp:1330
+msgid "Are you sure you want to restart?"
+msgstr "Are you sure you want to restart?"
+
+#: tconsole.cpp:1332
+msgid "Are you sure you want to shutdown?"
+msgstr "Are you sure you want to shutdown?"
+
+#: tconsole.cpp:1334
+msgid "Warning!"
+msgstr "Warning!"
+
+#: tconsole.cpp:1337
+msgid "Yes"
+msgstr "Yes"
+
+#: tconsole.cpp:1338
+msgid "No"
+msgstr "No"
+
+#: tconsole.cpp:1484 tconsole.cpp:1712
+msgid "Authenticated"
+msgstr "Authenticated"
+
+#: tconsole.cpp:1561
+#, c-format
+msgid "Uptime: %s"
+msgstr "Uptime: %s"
+
+#: tconsole.cpp:1566 tconsole.cpp:1567
+msgid "Load Average: "
+msgstr "Load Average: "
+
+#: tconsole.cpp:1575
+msgid "Idle: %"
+msgstr "Idle: %"
+
+#: tconsole.cpp:1576
+#, c-format
+msgid "Idle: %s%%"
+msgstr "Idle: %s%%"
+
+#: tconsole.cpp:1583
+msgid "Configuration URL"
+msgstr "Configuration URL"
+
+#: tconsole.cpp:1588
+msgid "Press Alt-F2 to Alt-F6 for additional shell terminals."
+msgstr "Press Alt-F2 to Alt-F6 for additional shell terminals."
+
+#: tconsole.cpp:1650
+msgid "Removing Packages"
+msgstr "Removing Packages"
+
+#: util.cpp:227
+msgid "^([0-9A-f:\\.]*)"
+msgstr "^([0-9A-f:\\.]*)"

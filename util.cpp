@@ -17,6 +17,8 @@
 #include "config.h"
 #endif
 
+#include "gettext.h"
+
 using namespace std;
 
 #include "util.h"
@@ -30,7 +32,7 @@ ccRegEx::ccRegEx(const char *expr, int nmatch, int flags)
     if (!nmatch) flags |= REG_NOSUB;
     if ((rc = regcomp(&regex, expr, flags)) != 0) {
         ostringstream os;
-        os << "Regular expression compilation error:";
+        os << "Regular expression compilation error: \"" << expr << "\": ";
         Error(rc, os);
         throw ccException(os.str().c_str());
     }
@@ -220,10 +222,11 @@ void ccGetLanIp(const char *command, string &ip)
         return;
     }
 
-    ccRegEx rx("^([0-9a-F:\\.]*)", 2);
+    ip = "127.0.0.1";
+
+    ccRegEx rx(_("^([0-9A-f:\\.]*)"), 2);
     FILE *ph = popen(command, "r");
 
-    ip = "127.0.0.1";
     if (ph) {
         char buffer[48];
         memset(buffer, 0, sizeof(buffer));

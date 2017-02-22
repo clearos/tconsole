@@ -1,8 +1,7 @@
-en@quot.gmo
 en@quot.insert-header
-en@quot.po
+*.gmo
 Makevars.template
+*.po~
 POTFILES
 remove-potcdate.sed
 stamp-po
-tconsole.pot

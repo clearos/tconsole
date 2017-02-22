@@ -1,7 +1,7 @@
 # Text console RPM spec
 Name: tconsole
 Version: 3.3
-Release: 2%{dist}
+Release: 3%{dist}
 Vendor: ClearFoundation
 License: GPL
 Group: System Environment/Daemons
@@ -25,6 +25,7 @@ Report bugs to: http://www.clearfoundation.com/docs/developer/bug_tracker/
 %prep
 %setup -q
 ./autogen.sh
+export CXXFLAGS="-std=gnu++11"
 %{configure}
 
 %build
