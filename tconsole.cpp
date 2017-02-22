@@ -342,7 +342,8 @@ void ccText::Resize(void)
 
     if (w != -1 || (!_lines.size() && line.size())) _lines.push_back(line);
     else if (w == -1 && _lines.size()) {
-        if (_lines[_lines.size() - 1] != line) _lines.push_back(line);
+        // XXX: Doesn't see to be needed.  Causes duplicate lines.
+        //if (_lines[_lines.size() - 1] != line) _lines.push_back(line);
     }
 
     for (unsigned long i = 0; i < _lines.size(); i++)
@@ -617,7 +618,8 @@ void ccProgressBar::Draw(void)
 }
 
 ccDialog::ccDialog(ccWindow *parent, const ccSize &size, const string &title, const string &blurb)
-    : ccWindow(parent, size, 6), title(title), selected(ccBUTTON_ID_NONE), button_width(6), user_id(0)
+    : ccWindow(parent, size, 6), title(title), blurb(NULL),
+    selected(ccBUTTON_ID_NONE), button_width(6), user_id(0)
 {
     this->blurb = new ccText(blurb, this->size.GetWidth() - 4);
     ccEventServer::Instance()->RegisterEvent(this, ccEVT_KEY_PRESS);
@@ -627,7 +629,7 @@ ccDialog::ccDialog(ccWindow *parent, const ccSize &size, const string &title, co
 ccDialog::~ccDialog()
 {
     if (blurb) delete blurb;
-    for (int i = 0; i < button.size(); i++) delete button[i];
+    for (size_t i = 0; i < button.size(); i++) delete button[i];
 }
 
 void ccDialog::Draw(void)
@@ -664,7 +666,7 @@ void ccDialog::Draw(void)
             offset_x = (size.GetWidth() - width) / 2;
         }
 
-        for (int i = 0; i < button.size(); i++) {
+        for (size_t i = 0; i < button.size(); i++) {
             wmove(window, offset_y, offset_x);
             waddch(window, (button[i]->HasFocus()) ? ACS_ULCORNER : ' ');
             wmove(window, offset_y + 1, offset_x);
@@ -672,7 +674,7 @@ void ccDialog::Draw(void)
             wmove(window, offset_y + 2, offset_x);
             waddch(window, (button[i]->HasFocus()) ? ACS_LLCORNER : ' ');
 
-            for (int j = 0; j < button_width + 2; j++) {
+            for (size_t j = 0; j < button_width + 2; j++) {
                 wmove(window, offset_y, offset_x + j + 1);
                 waddch(window, (button[i]->HasFocus()) ? ACS_HLINE : ' ');
                 wmove(window, offset_y + 2, offset_x + j + 1);
@@ -735,6 +737,9 @@ bool ccDialog::HandleEvent(ccEvent *event)
         ccEventServer::Instance()->PostEvent(event_paint);
 
         return true;
+
+    default:
+        break;
     }
 
     return false;
@@ -742,7 +747,7 @@ bool ccDialog::HandleEvent(ccEvent *event)
 
 ccButtonId ccDialog::GetFocus(void)
 {
-    for (int i = 0; i < button.size(); i++)
+    for (size_t i = 0; i < button.size(); i++)
         if (button[i]->HasFocus()) return button[i]->GetId();
 
     return ccBUTTON_ID_NONE;
@@ -752,7 +757,7 @@ void ccDialog::SetFocus(int index)
 {
     button.at(index);
 
-    for (int i = 0; i < button.size(); i++)
+    for (size_t i = 0; i < button.size(); i++)
         button[i]->SetFocus(false);
 
     button[index]->SetFocus();
@@ -760,7 +765,7 @@ void ccDialog::SetFocus(int index)
 
 void ccDialog::SetFocus(ccButtonId id)
 {
-    for (int i = 0; i < button.size(); i++) {
+    for (size_t i = 0; i < button.size(); i++) {
         if (button[i]->GetId() == id)
             button[i]->SetFocus();
         else
@@ -779,7 +784,7 @@ ccButtonId ccDialog::FocusNext(void)
         return button[0]->GetId();
     }
 
-    int i = 0;
+    size_t i = 0;
     for (; i < button.size(); i++) {
         if (!button[i]->HasFocus()) continue;
 
@@ -805,7 +810,7 @@ ccButtonId ccDialog::FocusPrevious(void)
         return button[0]->GetId();
     }
 
-    int i = button.size() - 1;
+    int i = (int)button.size() - 1;
     for (; i > -1; i--) {
         if (!button[i]->HasFocus()) continue;
 
@@ -831,7 +836,7 @@ void ccDialog::SetSelected(void)
 
 void ccDialog::AppendButton(ccButtonId id, const string &label, bool focus)
 {
-    for (int i = 0; i < button.size(); i++) {
+    for (size_t i = 0; i < button.size(); i++) {
         if (button[i]->GetId() != id) continue;
         return;
     }
@@ -913,7 +918,7 @@ ccMenu::ccMenu(ccWindow *parent, const ccSize &size, const string &title)
 
 ccMenu::~ccMenu()
 {
-    for (int i = 0; i < item.size(); i++) delete item[i];
+    for (size_t i = 0; i < item.size(); i++) delete item[i];
 }
 
 void ccMenu::Draw(void)
@@ -928,10 +933,10 @@ void ccMenu::Draw(void)
     int offset_y = 4;
     int offset_x = (size.GetWidth() - menu_width) / 2;
 
-    for (int i = 0; i < item.size(); i++) {
+    for (size_t i = 0; i < item.size(); i++) {
         if (!item[i]->IsVisible()) continue;
         if (item[i]->IsSeperator()) {
-            for (int x = 0; x < menu_width; x++) {
+            for (size_t x = 0; x < menu_width; x++) {
                 wmove(window, offset_y, offset_x + x);
                 waddch(window, ACS_HLINE);
             }
@@ -956,7 +961,7 @@ void ccMenu::Draw(void)
         if (item[i]->IsSelected()) {
             wcolor_set(window, 7, NULL);
             wprintw(window, " %s", item[i]->GetTitle().c_str());
-            for (int x = 0; x < (menu_width - item[i]->GetTitle().size()) + 1; x++)
+            for (size_t x = 0; x < (menu_width - item[i]->GetTitle().size()) + 1; x++)
                 waddch(window, ' ');
             wcolor_set(window, bg_cp, NULL);
         }
@@ -980,7 +985,7 @@ void ccMenu::Resize(void)
     ccSize view_size = parent->GetSize();
 
     int items = 0;
-    for (int i = 0; i < item.size(); i++) {
+    for (size_t i = 0; i < item.size(); i++) {
         if (!item[i]->IsVisible()) continue;
         items++;
     }
@@ -1035,7 +1040,7 @@ void ccMenu::CalcMenuWidth(void)
 {
     menu_width = 0;
 
-    for (int i = 0; i < item.size(); i++) {
+    for (size_t i = 0; i < item.size(); i++) {
         if (item[i]->GetTitle().size() > menu_width)
             menu_width = item[i]->GetTitle().size();
     }
@@ -1045,7 +1050,7 @@ void ccMenu::SelectItem(ccMenuId id)
 {
     if (id == ccMENU_ID_SEPERATOR) return;
 
-    for (int i = 0; i < item.size(); i++) {
+    for (size_t i = 0; i < item.size(); i++) {
         if (item[i]->GetId() == id) item[i]->SetSelected();
         else item[i]->SetSelected(false);
     }
@@ -1055,7 +1060,7 @@ bool ccMenu::SelectItem(int hotkey)
 {
     ccMenuId id = ccMENU_ID_INVALID;
 
-    for (int i = 0; i < item.size(); i++) {
+    for (size_t i = 0; i < item.size(); i++) {
         if (item[i]->GetHotkey() != hotkey ||
             !item[i]->IsVisible()) continue;
         id = item[i]->GetId();
@@ -1085,13 +1090,13 @@ void ccMenu::SelectNext(void)
     }
 
     int i = 0;
-    for (; i < item.size(); i++)
+    for (; i < (int)item.size(); i++)
         if (item[i]->GetId() == id) break;
 
-    if (i == item.size() - 1) return;
+    if (i == (int)item.size() - 1) return;
 
     int deselect = i;
-    for (i = i + 1; i < item.size(); i++) {
+    for (i = i + 1; i < (int)item.size(); i++) {
         if (item[i]->GetId() == ccMENU_ID_SEPERATOR ||
             !item[i]->IsVisible()) continue;
         item[deselect]->SetSelected(false);
@@ -1110,7 +1115,7 @@ void ccMenu::SelectPrevious(void)
     }
 
     int i = 0;
-    for (; i < item.size(); i++)
+    for (; i < (int)item.size(); i++)
         if (item[i]->GetId() == id) break;
 
     if (i == 0) return;
@@ -1128,7 +1133,7 @@ void ccMenu::SelectPrevious(void)
 
 ccMenuId ccMenu::GetSelected(void)
 {
-    for (int i = 0; i < item.size(); i++) {
+    for (size_t i = 0; i < item.size(); i++) {
         if (item[i]->IsSelected()) return item[i]->GetId();
     }
 
@@ -1140,8 +1145,8 @@ ccMenuItem::ccMenuItem(ccMenuId id, const string &title, int hotkey, const strin
 
 ccConsole::ccConsole()
     : ccWindow(NULL, ccSize(0, 0, 80, 24)),
-    run(true), proc_exec(NULL), proc_pipe(NULL),
-    dialog(NULL), login(NULL), sleep_mode(false)
+    run(true), sleep_mode(false), proc_exec(NULL), proc_pipe(NULL),
+    dialog(NULL), login(NULL)
 {
     if (instance) throw ccSingleInstanceException("ccConsole");
 
@@ -1375,7 +1380,6 @@ bool ccConsole::HandleEvent(ccEvent *event)
         }
         else if (event_process->GetProcess() == proc_pipe) {
             FILE *ph = proc_pipe->GetId();
-            int status = proc_pipe->GetExitStatus();
 
             string text = event_process->GetError();
             if (text.size())
@@ -1465,19 +1469,14 @@ bool ccConsole::HandleEvent(ccEvent *event)
         cerr << event_fault->GetReason() << endl;
 
         if (event_fault->GetReason() == string(_("Access denied"))) {
-            bool draw = false;
 
             idle_pause = true;
 
-            if (menu->IsVisible()) {
-                draw = true;
+            if (menu->IsVisible())
                 menu->SetVisible(false);
-            }
 
-            if (!login) {
-                draw = true;
+            if (!login)
                 login = new ccDialogLogin(this);
-            }
 
             Draw();
         }
@@ -1522,6 +1521,9 @@ bool ccConsole::HandleEvent(ccEvent *event)
     case ccEVT_PAINT:
         Refresh();
         return true;
+
+    default:
+        break;
     }
 
     return false;
@@ -1615,7 +1617,7 @@ void ccConsole::Resize(void)
     wclear(window);
     curs_set(1); curs_set(0);
 
-    for (int i = 0; i < child.size(); i++) child[i]->Resize();
+    for (size_t i = 0; i < child.size(); i++) child[i]->Resize();
 
     Draw();
 }

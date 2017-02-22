@@ -17,11 +17,11 @@ using namespace std;
 class ccRegEx
 {
 public:
-    ccRegEx(const char *expr, int nmatch = 0, int flags = REG_EXTENDED);
+    ccRegEx(const char *expr, size_t nmatch = 0, int flags = REG_EXTENDED);
     ~ccRegEx();
 
     int Execute(const char *subject);
-    const char *GetMatch(int match);
+    const char *GetMatch(size_t match);
 
     void Error(int rc, ostringstream &os);
 

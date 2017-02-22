@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: tconsole 3.3\n"
 "Report-Msgid-Bugs-To: developer@clearfoundation.com\n"
-"POT-Creation-Date: 2017-02-21 19:42-0500\n"
+"POT-Creation-Date: 2017-02-21 21:57-0500\n"
 "PO-Revision-Date: 2017-02-21 14:37-0500\n"
 "Last-Translator: Darryl Sokoloski <dsokoloski@clearfoundation.com>\n"
 "Language-Team: French\n"
@@ -17,112 +17,109 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: tconsole.cpp:847 tconsole.cpp:850
+#: tconsole.cpp:852 tconsole.cpp:855
 msgid "Login"
 msgstr "S'identifier"
 
-#: tconsole.cpp:847
+#: tconsole.cpp:852
 msgid "Administrator password:"
 msgstr "Mot de passe administrateur:"
 
-#: tconsole.cpp:882
+#: tconsole.cpp:887
 msgid "package"
 msgstr "paquet"
 
-#: tconsole.cpp:883
+#: tconsole.cpp:888
 msgid "of"
 msgstr "de"
 
-#: tconsole.cpp:908
+#: tconsole.cpp:913
 msgid "Preparing..."
 msgstr "Préparer..."
 
-#: tconsole.cpp:1177
+#: tconsole.cpp:1182
 msgid "Welcome!"
 msgstr "Bienvenue!"
 
-#: tconsole.cpp:1181
+#: tconsole.cpp:1186
 msgid "Launch Graphics-mode Console"
 msgstr "Lancer la Console en Mode Graphique"
 
-#: tconsole.cpp:1183
+#: tconsole.cpp:1188
 msgid "Remove Graphics-mode Console"
 msgstr "Supprimer la Console en Mode Graphique"
 
-#: tconsole.cpp:1186
+#: tconsole.cpp:1191
 msgid "Network Analyzer (IPTraf)"
 msgstr "Analyseur de Réseau (IPTraf)"
 
-#: tconsole.cpp:1189
+#: tconsole.cpp:1194
 msgid "System Restart (Reboot)"
-msgstr "Redémarrage du Système"
+msgstr "Redémarrage du Système (Reboot)"
 
-#: tconsole.cpp:1191
+#: tconsole.cpp:1196
 msgid "System Shutdown (Halt)"
 msgstr "Arrêt du Système (Halt)"
 
-#: tconsole.cpp:1194
+#: tconsole.cpp:1199
 msgid "Logout"
 msgstr "Connectez - Out"
 
-#: tconsole.cpp:1275 tconsole.cpp:1467 tconsole.cpp:1705 tconsole.cpp:1717
+#: tconsole.cpp:1280 tconsole.cpp:1471 tconsole.cpp:1707 tconsole.cpp:1719
 msgid "Access denied"
 msgstr "Accès Refusé"
 
-#: tconsole.cpp:1330
+#: tconsole.cpp:1335
 msgid "Are you sure you want to restart?"
 msgstr "Êtes-vous sûr de vouloir redémarrer?"
 
-#: tconsole.cpp:1332
+#: tconsole.cpp:1337
 msgid "Are you sure you want to shutdown?"
 msgstr "Êtes-vous sûr de vouloir arrêter?"
 
-#: tconsole.cpp:1334
+#: tconsole.cpp:1339
 msgid "Warning!"
 msgstr "Attention!"
 
-#: tconsole.cpp:1337
+#: tconsole.cpp:1342
 msgid "Yes"
 msgstr "Oui"
 
-#: tconsole.cpp:1338
+#: tconsole.cpp:1343
 msgid "No"
 msgstr "Non"
 
-#: tconsole.cpp:1484 tconsole.cpp:1712
+#: tconsole.cpp:1483 tconsole.cpp:1714
 msgid "Authenticated"
 msgstr "Authentifié"
 
-#: tconsole.cpp:1561
+#: tconsole.cpp:1563
 #, c-format
 msgid "Uptime: %s"
 msgstr "Temps de Fonctionnement: %s"
 
-#: tconsole.cpp:1566 tconsole.cpp:1567
+#: tconsole.cpp:1568 tconsole.cpp:1569
 msgid "Load Average: "
 msgstr "Charge Moyenne: "
 
-#: tconsole.cpp:1575
+#: tconsole.cpp:1577
 msgid "Idle: %"
 msgstr "Fainéanter: %"
 
-#: tconsole.cpp:1576
+#: tconsole.cpp:1578
 #, c-format
 msgid "Idle: %s%%"
 msgstr "Fainéanter: %s%%"
 
-#: tconsole.cpp:1583
+#: tconsole.cpp:1585
 msgid "Configuration URL"
 msgstr "URL de Configuration"
 
-#: tconsole.cpp:1588
+#: tconsole.cpp:1590
 msgid "Press Alt-F2 to Alt-F6 for additional shell terminals."
-msgstr "Appuyez sur Alt-F2 pour Alt-F6 pour les terminaux shell supplémentaire."
+msgstr ""
+"Appuyez sur Alt-F2 pour Alt-F6 pour les terminaux shell supplémentaire."
 
-#: tconsole.cpp:1650
+#: tconsole.cpp:1652
 msgid "Removing Packages"
 msgstr "Supprimer les Paquets"
-
-#: util.cpp:227
-msgid "^([0-9A-f:\\.]*)"
-msgstr "^([0-9f-A:\\.]*)"

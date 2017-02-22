@@ -25,7 +25,7 @@ Report bugs to: http://www.clearfoundation.com/docs/developer/bug_tracker/
 %prep
 %setup -q
 ./autogen.sh
-export CXXFLAGS="-std=gnu++11"
+CXXFLAGS='-Wno-unused-result'
 %{configure}
 
 %build

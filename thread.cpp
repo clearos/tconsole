@@ -109,7 +109,7 @@ void ccMutex::SetDebug(bool enable)
     cerr << endl;
 }
 
-ccCondition::ccCondition(ccMutex &mutex) : state(ccCOND_STATE_NONE), mutex(mutex)
+ccCondition::ccCondition(ccMutex &mutex) : mutex(mutex), state(ccCOND_STATE_NONE)
 {
     int result;
 

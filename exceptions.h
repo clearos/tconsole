@@ -41,7 +41,7 @@ class ccThreadException : public ccException
 {
 public:
     ccThreadException(long thread_id, const string &reason, int error)
-        : ccException(reason), id(id), reason(reason), error(error) { }
+        : ccException(reason), id(thread_id), reason(reason), error(error) { }
     ~ccThreadException() throw() { }
 
     long GetId(void) { return id; }

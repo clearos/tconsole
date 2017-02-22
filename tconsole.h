@@ -284,7 +284,7 @@ class ccEventServer
 {
 public:
     ccEventServer(void);
-    ~ccEventServer();
+    virtual ~ccEventServer();
 
     void PostEvent(ccEvent *event);
     static ccEventServer *Instance(void);
@@ -404,7 +404,7 @@ class ccTimer : public ccThread
 {
 public:
     ccTimer(ccEventClient *parent, bool one_shot = false);
-    ~ccTimer() { Stop(); };
+    virtual ~ccTimer() { Stop(); };
 
     bool Start(uint32_t usec);
     bool Stop(void);
@@ -498,7 +498,7 @@ class ccInputBox : public ccWindow
 {
 public:
     ccInputBox(ccWindow *parent, const ccSize &size, const string &value = "");
-    ~ccInputBox();
+    virtual ~ccInputBox();
 
     void SetReadOnly(bool readonly = true)
     {
@@ -531,7 +531,7 @@ class ccProgressBar : public ccWindow
 {
 public:
     ccProgressBar(ccWindow *parent, const ccSize &size);
-    ~ccProgressBar();
+    virtual ~ccProgressBar();
 
     void SetRange(uint32_t value) { this->mvalue = value; };
     void Update(uint32_t value);
@@ -547,7 +547,7 @@ class ccDialog : public ccWindow
 {
 public:
     ccDialog(ccWindow *parent, const ccSize &size, const string &title, const string &blurb);
-    ~ccDialog();
+    virtual ~ccDialog();
 
     void SetBlurb(const string &blurb) { this->blurb->SetText(blurb); Draw(); };
 
@@ -572,12 +572,12 @@ public:
     void AppendButton(ccButtonId id, const string &label, bool focus = false);
 
 protected:
-    int user_id;
-    int button_width;
-    ccButtonId selected;
     string title;
     ccText *blurb;
+    ccButtonId selected;
     vector<ccButton *> button;
+    size_t button_width;
+    int user_id;
 };
 
 class ccDialogLogin : public ccDialog
@@ -653,7 +653,7 @@ class ccMenu : public ccWindow
 {
 public:
     ccMenu(ccWindow *parent, const ccSize &size, const string &title);
-    ~ccMenu();
+    virtual ~ccMenu();
 
     void Draw(void);
     void Resize(void);
@@ -672,7 +672,7 @@ public:
 protected:
     string title;
     string blurb;
-    int menu_width;
+    size_t menu_width;
     vector<ccMenuItem *> item;
 
     void CalcMenuWidth(void);
@@ -682,6 +682,7 @@ class ccMenuItem
 {
 public:
     ccMenuItem(ccMenuId id, const string &title, int hotkey = 0, const string &hotkey_title = "");
+    virtual ~ccMenuItem() { }
 
     ccMenuId GetId(void) { return id; };
     string GetTitle(void) { return title; };
@@ -696,11 +697,11 @@ public:
 
 protected:
     ccMenuId id;
+    string title;
+    int hotkey;
+    string hotkey_title;
     bool selected;
     bool visible;
-    string title;
-    string hotkey_title;
-    int hotkey;
 };
 
 class ccMenuSpacer : public ccMenuItem
@@ -720,7 +721,7 @@ class ccConsole : public ccWindow
 {
 public:
     ccConsole();
-    ~ccConsole();
+    virtual ~ccConsole();
 
     static ccConsole *Instance(void);
 
@@ -769,7 +770,7 @@ class ccThreadEvent : public ccThread
 {
 public:
     ccThreadEvent(void);
-    ~ccThreadEvent();
+    virtual ~ccThreadEvent();
 
     void *Entry(void);
 
@@ -781,7 +782,7 @@ class ccThreadUpdate : public ccThread
 {
 public:
     ccThreadUpdate(void);
-    ~ccThreadUpdate();
+    virtual ~ccThreadUpdate();
 
     void *Entry(void);
 
@@ -797,7 +798,7 @@ class ccProcessBase
 {
 public:
     ccProcessBase(const string &path, const vector<string> &arg);
-    ~ccProcessBase();
+    virtual ~ccProcessBase();
 
     virtual void Execute(void) { thread = NULL; };
 
@@ -813,8 +814,8 @@ protected:
     friend class ccThreadProcessExec;
     friend class ccThreadProcessPipe;
 
-    char **argv;
     string path;
+    char **argv;
     int status;
     ccThreadProcessBase *thread;
     ccMutex lock;

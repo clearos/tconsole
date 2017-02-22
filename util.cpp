@@ -24,8 +24,8 @@ using namespace std;
 #include "util.h"
 #include "exceptions.h"
 
-ccRegEx::ccRegEx(const char *expr, int nmatch, int flags)
-    : match(NULL), nmatch(nmatch), matches(NULL)
+ccRegEx::ccRegEx(const char *expr, size_t nmatch, int flags)
+    : nmatch(nmatch), match(NULL), matches(NULL)
 {
     int rc;
 
@@ -39,7 +39,7 @@ ccRegEx::ccRegEx(const char *expr, int nmatch, int flags)
     if (nmatch) {
         match = new regmatch_t[nmatch];
         matches = new char *[nmatch];
-        for (int i = 0; i < nmatch; i++) matches[i] = NULL;
+        for (size_t i = 0; i < nmatch; i++) matches[i] = NULL;
     }
 }
 
@@ -47,7 +47,7 @@ ccRegEx::~ccRegEx()
 {
     regfree(&regex);
     if (nmatch && match) delete [] match;
-    for (int i = 0; i < nmatch; i++)
+    for (size_t i = 0; i < nmatch; i++)
         if (matches[i]) delete [] matches[i];
     if (matches) delete [] matches;
 }
@@ -57,12 +57,12 @@ int ccRegEx::Execute(const char *subject)
     if (!subject)
         throw ccException("Invalid regular expression subject");
     int rc = regexec(&regex, subject, nmatch, match, 0);
-    for (int i = 0; i < nmatch; i++) {
+    for (size_t i = 0; i < nmatch; i++) {
         if (matches[i]) delete [] matches[i];
         matches[i] = NULL;
     }
     if (rc == 0) {
-        for (int i = 0; i < nmatch; i++) {
+        for (size_t i = 0; i < nmatch; i++) {
             int len = match[i].rm_eo - match[i].rm_so;
             char *buffer = new char[len + 1];
             memset(buffer, 0, len + 1);
@@ -73,7 +73,7 @@ int ccRegEx::Execute(const char *subject)
     return rc;
 }
 
-const char *ccRegEx::GetMatch(int match)
+const char *ccRegEx::GetMatch(size_t match)
 {
     if (match < 0 || match >= nmatch)
         throw ccException("Invalid regular expression match offset");
@@ -130,12 +130,12 @@ void ccRegEx::Error(int rc, ostringstream &os)
 }
 
 ccFile::ccFile()
-    : filename(NULL), fd(-1), buffer((char *)MAP_FAILED)
+    : fd(-1), filename(NULL), buffer((char *)MAP_FAILED)
 {
 }
 
 ccFile::ccFile(const char *filename)
-    : filename(filename), fd(-1), buffer((char *)MAP_FAILED)
+    : fd(-1), filename(filename), buffer((char *)MAP_FAILED)
 {
     Map(filename);
 }
@@ -224,7 +224,7 @@ void ccGetLanIp(const char *command, string &ip)
 
     ip = "127.0.0.1";
 
-    ccRegEx rx(_("^([0-9A-f:\\.]*)"), 2);
+    ccRegEx rx("^([0-9f-A:\\.]*)", 2);
     FILE *ph = popen(command, "r");
 
     if (ph) {
