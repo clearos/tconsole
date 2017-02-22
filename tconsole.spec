@@ -1,7 +1,7 @@
 # Text console RPM spec
 Name: tconsole
 Version: 3.3
-Release: 3%{dist}
+Release: 4%{dist}
 Vendor: ClearFoundation
 License: GPL
 Group: System Environment/Daemons
@@ -13,7 +13,7 @@ Requires: sudo
 Summary: Text-based console tool
 BuildRequires: autoconf >= 2.63
 BuildRequires: automake
-BuildRequires: gettext
+BuildRequires: gettext-devel
 BuildRequires: libtool
 BuildRequires: ncurses-devel
 
