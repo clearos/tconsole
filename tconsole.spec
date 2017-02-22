@@ -25,7 +25,7 @@ Report bugs to: http://www.clearfoundation.com/docs/developer/bug_tracker/
 %prep
 %setup -q
 ./autogen.sh
-CXXFLAGS="${CXXFLAGS:--Wno-unused-result}"; export CXXFLAGS;
+CXXFLAGS="${CXXFLAGS:-%optflags -Wno-unused-result}"; export CXXFLAGS;
 %{configure}
 
 %build

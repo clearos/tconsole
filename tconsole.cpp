@@ -1877,7 +1877,7 @@ ccProcessBase::ccProcessBase(const string &path, const vector<string> &arg)
     memset(argv[0], 0, path.size() + 1);
     memcpy(argv[0], path.c_str(), path.size());
 
-    int i = 0;
+    size_t i = 0;
     for (; i < arg.size(); i++) {
         if (!arg[i].size()) continue;
 
