@@ -1,7 +1,7 @@
 # Text console RPM spec
 Name: tconsole
 Version: 3.3
-Release: 7%{dist}
+Release: 8%{dist}
 Vendor: ClearFoundation
 License: GPL
 Group: System Environment/Daemons
@@ -16,6 +16,10 @@ BuildRequires: automake
 BuildRequires: gettext-devel
 BuildRequires: libtool
 BuildRequires: ncurses-devel
+%if "0%{dist}" == "0.v7"
+%{?systemd_requires}
+BuildRequires: systemd
+%endif
 
 %description
 Text-based console tool
@@ -35,10 +39,29 @@ make %{?_smp_mflags}
 %install
 make install DESTDIR=$RPM_BUILD_ROOT
 %find_lang %{name}
+install -D -m 644 deploy/gconsole.service %{buildroot}/%{_unitdir}/gconsole.service
 
 # Clean-up
 %clean
 [ "$RPM_BUILD_ROOT" != "/" ] && rm -rf $RPM_BUILD_ROOT
+
+# Post install
+%post
+%if "0%{dist}" == "0.v7"
+%systemd_post gconsole.service
+%endif
+
+# Pre uninstall
+%preun
+%if "0%{dist}" == "0.v7"
+%systemd_preun %{name}.service
+%endif
+
+# Post uninstall
+%postun
+%if "0%{dist}" == "0.v7"
+%systemd_postun_with_restart %{name}.service
+%endif
 
 # Files
 %files -f %{name}.lang
@@ -46,4 +69,6 @@ make install DESTDIR=$RPM_BUILD_ROOT
 %{_bindir}/start-gconsole
 %{_sbindir}/tc-yum
 %{_sbindir}/tconsole
-
+%if "0%{dist}" == "0.v7"
+%attr(644,root,root) %{_unitdir}/%{name}.service
+%endif

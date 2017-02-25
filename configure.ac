@@ -36,5 +36,5 @@ AC_FUNC_MMAP
 AC_FUNC_REALLOC
 AC_CHECK_FUNCS([getpagesize memset munmap regcomp setenv setlocale strerror strtol])
 
-AC_CONFIG_FILES([tconsole.spec Makefile utils/Makefile po/Makefile.in])
+AC_CONFIG_FILES([tconsole.spec Makefile deploy/Makefile po/Makefile.in])
 AC_OUTPUT

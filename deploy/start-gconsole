@@ -1,0 +1,8 @@
+#!/bin/bash
+
+if [ -f /usr/lib/systemd/system/gconsole.service ]; then
+    sudo systemctl start gconsole
+else
+    exec /usr/bin/startx $@
+fi
+

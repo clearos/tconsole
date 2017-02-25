@@ -1,0 +1,12 @@
+[Unit]
+Description='ClearOS Graphical Console'
+After=getty@tty1.service
+
+[Service]
+User=clearconsole
+Group=clearconsole
+Type=simple
+ExecStart=/usr/bin/startx
+
+[Install]
+WantedBy=getty@tty1.service

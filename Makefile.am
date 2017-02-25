@@ -1,6 +1,6 @@
 AUTOMAKE_OPTIONS = foreign
 
-SUBDIRS = po utils
+SUBDIRS = deploy po
 
 EXTRA_DIST = autogen.sh config.rpath exceptions.h gettext.h tconsole.h tconsole.spec thread.h util.h
 
