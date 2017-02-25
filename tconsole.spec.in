@@ -54,13 +54,13 @@ install -D -m 644 deploy/gconsole.service %{buildroot}/%{_unitdir}/gconsole.serv
 # Pre uninstall
 %preun
 %if "0%{dist}" == "0.v7"
-%systemd_preun %{name}.service
+%systemd_preun gconsole.service
 %endif
 
 # Post uninstall
 %postun
 %if "0%{dist}" == "0.v7"
-%systemd_postun_with_restart %{name}.service
+%systemd_postun_with_restart gconsole.service
 %endif
 
 # Files
@@ -70,5 +70,5 @@ install -D -m 644 deploy/gconsole.service %{buildroot}/%{_unitdir}/gconsole.serv
 %{_sbindir}/tc-yum
 %{_sbindir}/tconsole
 %if "0%{dist}" == "0.v7"
-%attr(644,root,root) %{_unitdir}/%{name}.service
+%attr(644,root,root) %{_unitdir}/gconsole.service
 %endif
