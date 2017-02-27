@@ -14,7 +14,7 @@
         { "path":"/po/",
           "output_mask": {
             "directory": "",
-            "file": "%filename%-%langcode%.po"
+            "file": "%filename%-%langcode%.%fileext%"
            },
           "file_filters": ["en@quot.po"],
           "output_path": "/po/"
