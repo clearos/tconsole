@@ -1,0 +1,146 @@
+# English translations for tconsole package.
+# Copyright (C) 2017 ClearFoundation
+# This file is distributed under the same license as the tconsole package.
+# Automatically generated, 2017.
+#
+# All this catalog "translates" are quotation characters.
+# The msgids must be ASCII and therefore cannot contain real quotation
+# characters, only substitutes like grave accent (0x60), apostrophe (0x27)
+# and double quote (0x22). These substitutes look strange; see
+# http://www.cl.cam.ac.uk/~mgk25/ucs/quotes.html
+#
+# This catalog translates grave accent (0x60) and apostrophe (0x27) to
+# left single quotation mark (U+2018) and right single quotation mark (U+2019).
+# It also translates pairs of apostrophe (0x27) to
+# left single quotation mark (U+2018) and right single quotation mark (U+2019)
+# and pairs of quotation mark (0x22) to
+# left double quotation mark (U+201C) and right double quotation mark (U+201D).
+#
+# When output to an UTF-8 terminal, the quotation characters appear perfectly.
+# When output to an ISO-8859-1 terminal, the single quotation marks are
+# transliterated to apostrophes (by iconv in glibc 2.2 or newer) or to
+# grave/acute accent (by libiconv), and the double quotation marks are
+# transliterated to 0x22.
+# When output to an ASCII terminal, the single quotation marks are
+# transliterated to apostrophes, and the double quotation marks are
+# transliterated to 0x22.
+#
+msgid ""
+msgstr ""
+"blankProject-Id-Version: tconsole 3.3"
+"Report-Msgid-Bugs-To: developer@clearfoundation.com"
+"POT-Creation-Date: 2017-02-21 21:57-0500"
+"PO-Revision-Date: 2017-02-21 21:57-0500"
+"Last-Translator: Automatically generated"
+"Language-Team: none"
+"Language: en@quot"
+"MIME-Version: 1.0"
+"Content-Type: text/plain; charset=UTF-8"
+"Content-Transfer-Encoding: 8bit"
+"Plural-Forms: nplurals=2; plural=(n != 1);"
+
+#: tconsole.cpp:852 tconsole.cpp:855
+msgid "Login"
+msgstr "लॉग-इन"
+
+#: tconsole.cpp:852
+msgid "Administrator password:"
+msgstr "प्रशासक पासवर्ड:"
+
+#: tconsole.cpp:887
+msgid "package"
+msgstr "पॅकेज"
+
+#: tconsole.cpp:888
+msgid "of"
+msgstr "च्या"
+
+#: tconsole.cpp:913
+msgid "Preparing..."
+msgstr "तयार करीत आहे ... "
+
+#: tconsole.cpp:1182
+msgid "Welcome!"
+msgstr "आपले स्वागत आहे! "
+
+#: tconsole.cpp:1186
+msgid "Launch Graphics-mode Console"
+msgstr "लाँच ग्राफिक्स-मोड कंसोल"
+
+#: tconsole.cpp:1188
+msgid "Remove Graphics-mode Console"
+msgstr "ग्राफिक्स-मोड कंसोल काढा"
+
+#: tconsole.cpp:1191
+msgid "Network Analyzer (IPTraf)"
+msgstr "संजाळएनॉलाइजर (IPTraf)"
+
+#: tconsole.cpp:1194
+msgid "System Restart (Reboot)"
+msgstr "प्रणाली पुनः सुरू करा (रीबूट)"
+
+#: tconsole.cpp:1196
+msgid "System Shutdown (Halt)"
+msgstr "प्रणाली शटडाउन (थांबवा)"
+
+#: tconsole.cpp:1199
+msgid "Logout"
+msgstr "बाहेर पडणे"
+
+#: tconsole.cpp:1280 tconsole.cpp:1471 tconsole.cpp:1707 tconsole.cpp:1719
+msgid "Access denied"
+msgstr "प्रवेश नाकारला"
+
+#: tconsole.cpp:1335
+msgid "Are you sure you want to restart?"
+msgstr "आपली खात्री आहे की आपण रीस्टार्ट करायचे आहे? "
+
+#: tconsole.cpp:1337
+msgid "Are you sure you want to shutdown?"
+msgstr "आपण बंद करण्यासाठी खात्री आहे का? "
+
+#: tconsole.cpp:1339
+msgid "Warning!"
+msgstr "इशारा! "
+
+#: tconsole.cpp:1342
+msgid "Yes"
+msgstr "होय"
+
+#: tconsole.cpp:1343
+msgid "No"
+msgstr "नाही"
+
+#: tconsole.cpp:1483 tconsole.cpp:1714
+msgid "Authenticated"
+msgstr "प्रमाणीकृत"
+
+#: tconsole.cpp:1563
+#, c-format
+msgid "Uptime: %s"
+msgstr "चालू असण्याची: %s"
+
+#: tconsole.cpp:1568 tconsole.cpp:1569
+msgid "Load Average: "
+msgstr "सरासरी लोड करा:"
+
+#: tconsole.cpp:1577
+msgid "Idle: %"
+msgstr "निष्क्रिय: %"
+
+#: tconsole.cpp:1578
+#, c-format
+msgid "Idle: %s%%"
+msgstr "निष्क्रिय: %s %%"
+
+#: tconsole.cpp:1585
+msgid "Configuration URL"
+msgstr "कॉन्फिगरेशन URL"
+
+#: tconsole.cpp:1590
+msgid "Press Alt-F2 to Alt-F6 for additional shell terminals."
+msgstr "Alt दाबा-F2 Alt-F6 अतिरिक्त शेल टर्मिनल करीता. "
+
+#: tconsole.cpp:1652
+msgid "Removing Packages"
+msgstr "पॅकेजेस काढून"
