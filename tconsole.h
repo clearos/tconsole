@@ -37,12 +37,8 @@
 #define PATH_IPTRAF             "/usr/bin/iptraf"
 #endif
 
-#ifndef PATH_REBOOT
-#define PATH_REBOOT             "/sbin/reboot"
-#endif
-
-#ifndef PATH_HALT
-#define PATH_HALT               "/sbin/halt"
+#ifndef PATH_SYSTEMCTL
+#define PATH_SYSTEMCTL          "/usr/bin/systemctl"
 #endif
 
 #ifndef PATH_SUDO

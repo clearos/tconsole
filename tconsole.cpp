@@ -1665,7 +1665,8 @@ void ccConsole::LaunchProcess(ccMenuId id)
 
     case ccMENU_ID_SYS_REBOOT:
         path = PATH_SUDO;
-        argv.push_back(PATH_REBOOT);
+        argv.push_back(PATH_SYSTEMCTL);
+        argv.push_back("reboot");
         SetVisible(false);
         Draw();
         run = false;
@@ -1673,7 +1674,8 @@ void ccConsole::LaunchProcess(ccMenuId id)
 
     case ccMENU_ID_SYS_SHUTDOWN:
         path = PATH_SUDO;
-        argv.push_back(PATH_HALT);
+        argv.push_back(PATH_SYSTEMCTL);
+        argv.push_back("poweroff");
         SetVisible(false);
         Draw();
         run = false;
